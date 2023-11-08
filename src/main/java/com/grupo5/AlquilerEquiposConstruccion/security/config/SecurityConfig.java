@@ -35,8 +35,10 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((authorize) -> authorize
+
+//                        .requestMatchers(antMatcher("/login*")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/user/update/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher("/api/auth/**")).permitAll()
-                        .requestMatchers(antMatcher("/login*")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/**")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.POST, "/**")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/**")).hasRole("ADMIN")
