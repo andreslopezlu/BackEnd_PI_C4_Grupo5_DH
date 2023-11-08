@@ -4,6 +4,7 @@ import com.grupo5.AlquilerEquiposConstruccion.dto.LoginDTO;
 import com.grupo5.AlquilerEquiposConstruccion.security.config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginDTO loginDto) {
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDto) {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(login);
 
@@ -35,6 +36,11 @@ public class AuthController {
 
         String jwt = this.jwtUtil.create(loginDto.getUsername());
 
-        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
+        if(jwt != null){
+            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).body("{\"jwt\"" + ":" + "\"" + jwt + "\"" + "}");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with username: " + loginDto.getUsername() + " was not found.");
+        }
+
     }
 }
