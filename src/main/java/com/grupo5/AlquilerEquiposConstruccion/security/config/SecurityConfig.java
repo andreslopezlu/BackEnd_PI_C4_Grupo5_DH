@@ -32,15 +32,30 @@ public class SecurityConfig {
         http
                 .csrf((csrf) -> csrf.disable())
                 .cors(Customizer.withDefaults())
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(antMatcher("/api/auth/**")).permitAll()
+                        .requestMatchers(antMatcher("/login*")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/**")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.POST, "/**")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/**")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/**")).hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest()
+                        .authenticated()
                 )
+//                .formLogin()
+//                .loginPage("/login.html")
+//                .loginProcessingUrl("/perform_login")
+//                .defaultSuccessUrl("/homepage.html", true)
+//                .failureUrl("/login.html?error=true")
+//                .and()
+//                .logout()
+//                .logoutSuccessUrl("/home")
+//                .logoutUrl("/perform_logout")
+//                .invalidateHttpSession(true)
+//                .deleteCookies("JSESSIONID")
+//                .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
