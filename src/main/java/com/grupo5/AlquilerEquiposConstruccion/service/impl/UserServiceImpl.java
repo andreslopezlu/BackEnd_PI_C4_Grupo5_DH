@@ -9,6 +9,7 @@ import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Category;
 import com.grupo5.AlquilerEquiposConstruccion.model.User;
 import com.grupo5.AlquilerEquiposConstruccion.repository.UserRepository;
+import com.grupo5.AlquilerEquiposConstruccion.service.EmailService;
 import com.grupo5.AlquilerEquiposConstruccion.service.UserService;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.apache.log4j.Logger;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     ObjectMapper mapper;
+
+    @Autowired
+    EmailService emailService;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -61,6 +66,17 @@ public class UserServiceImpl implements UserService {
             logger.info("The user was created successfully.");
             mapper.convertValue(userRepository.save(userCreated), UserDTO.class);
         }
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(userDTO.getEmail());
+        mailMessage.setSubject("Registro completo en AlquiConstruye!");
+        mailMessage.setText("Bienvenido, hiciste el proceso de registro con el email: "
+                + userDTO.getEmail()
+                + ". "
+                + "Para ingresar a tu cuenta haz click en el siguiente enlace: "
+                + "https://www.google.com/. "
+                + "Saludos desde G5 - C4 - DH");
+        emailService.sendEmail(mailMessage);
     }
 
     @Override
