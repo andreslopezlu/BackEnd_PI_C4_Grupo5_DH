@@ -1,5 +1,7 @@
 package com.grupo5.AlquilerEquiposConstruccion.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.grupo5.AlquilerEquiposConstruccion.model.City;
 import com.grupo5.AlquilerEquiposConstruccion.model.Role;
 import jakarta.persistence.Column;

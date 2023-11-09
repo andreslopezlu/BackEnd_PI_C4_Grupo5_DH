@@ -49,13 +49,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO saveUser(UserDTO userDTO) throws BadRequestException {
-        if (userDTO.getName()==null || userDTO.getLastName()==null || userDTO.getEmail()==null || userDTO.getPhoneNumber()==null){
+    public void saveUser(UserDTO userDTO) throws BadRequestException {
+        if (userDTO.getName()==null || userDTO.getLastName()==null || userDTO.getEmail()==null || userDTO.getPhoneNumber()==null || userDTO.getPassword()==null){
             throw new BadRequestException("The user has null values.");
+        }
+        Boolean isExistingUser = userRepository.findByEmail(userDTO.getEmail()).isPresent();
+        if (isExistingUser){
+            throw new BadRequestException("The user already exists.");
         } else{
             User userCreated = mapper.convertValue(userDTO, User.class);
             logger.info("The user was created successfully.");
-            return mapper.convertValue(userRepository.save(userCreated), UserDTO.class);
+            mapper.convertValue(userRepository.save(userCreated), UserDTO.class);
         }
     }
 

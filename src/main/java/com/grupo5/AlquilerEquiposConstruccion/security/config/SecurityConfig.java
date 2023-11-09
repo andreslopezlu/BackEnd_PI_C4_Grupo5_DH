@@ -38,6 +38,7 @@ public class SecurityConfig {
 
 //                        .requestMatchers(antMatcher("/login*")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/user/update/*")).hasRole("ADMIN")
+                                .requestMatchers(antMatcher("/user/create")).permitAll()
                         .requestMatchers(antMatcher("/api/auth/**")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/**")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.POST, "/**")).hasRole("ADMIN")
