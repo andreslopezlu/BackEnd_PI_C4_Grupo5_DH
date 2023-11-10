@@ -1,7 +1,10 @@
 package com.grupo5.AlquilerEquiposConstruccion.controller;
 
 import com.grupo5.AlquilerEquiposConstruccion.dto.LoginDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.LoginDTOResponse;
+import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.security.config.JwtUtil;
+import com.grupo5.AlquilerEquiposConstruccion.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +25,16 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDto) {
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDto) throws NotFoundException {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(login);
 
@@ -36,8 +43,14 @@ public class AuthController {
 
         String jwt = this.jwtUtil.create(loginDto.getUsername());
 
+        String username = loginDto.getUsername();
+        String role = userService.getRoleByUsername(username).getName();
+
+        LoginDTOResponse response = new LoginDTOResponse(jwt, role);
+
+
         if(jwt != null){
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).body("{\"jwt\"" + ":" + "\"" + jwt + "\"" + "}");
+            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).body(response.toString());
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with username: " + loginDto.getUsername() + " was not found.");
         }

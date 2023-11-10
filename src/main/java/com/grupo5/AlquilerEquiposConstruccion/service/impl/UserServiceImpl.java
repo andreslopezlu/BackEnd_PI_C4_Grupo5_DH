@@ -1,17 +1,15 @@
 package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo5.AlquilerEquiposConstruccion.dto.CategoryDTO;
-import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.RoleDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.UserDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Category;
+import com.grupo5.AlquilerEquiposConstruccion.model.Role;
 import com.grupo5.AlquilerEquiposConstruccion.model.User;
 import com.grupo5.AlquilerEquiposConstruccion.repository.UserRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.EmailService;
 import com.grupo5.AlquilerEquiposConstruccion.service.UserService;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -97,6 +95,16 @@ public class UserServiceImpl implements UserService {
         userRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
                 "user with the id: " + id + " was not found."));
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public RoleDTO getRoleByUsername(String username) throws NotFoundException {
+        Optional<User> user = userRepository.findByEmail(username);
+        if (user != null) {
+            Role role = user.get().getRole();
+            return mapper.convertValue(role, RoleDTO.class);
         }
+        throw new NotFoundException("User not found.");
+    }
 }
 
