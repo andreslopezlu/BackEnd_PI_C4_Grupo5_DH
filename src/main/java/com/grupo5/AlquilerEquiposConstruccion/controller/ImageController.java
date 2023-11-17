@@ -1,17 +1,13 @@
 package com.grupo5.AlquilerEquiposConstruccion.controller;
 
-import com.grupo5.AlquilerEquiposConstruccion.dto.CityDTO;
+
 import com.grupo5.AlquilerEquiposConstruccion.dto.ImageDTO;
-import com.grupo5.AlquilerEquiposConstruccion.dto.UserDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Image;
 import com.grupo5.AlquilerEquiposConstruccion.service.ImageService;
-import com.grupo5.AlquilerEquiposConstruccion.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,11 +1,9 @@
 package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo5.AlquilerEquiposConstruccion.dto.CityDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ImageDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.City;
 import com.grupo5.AlquilerEquiposConstruccion.model.Image;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ImageRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.ImageService;

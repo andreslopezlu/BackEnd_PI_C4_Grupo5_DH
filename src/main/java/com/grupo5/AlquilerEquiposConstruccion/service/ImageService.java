@@ -3,7 +3,6 @@ package com.grupo5.AlquilerEquiposConstruccion.service;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ImageDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Image;
 import java.util.List;
 import java.util.Optional;
 
