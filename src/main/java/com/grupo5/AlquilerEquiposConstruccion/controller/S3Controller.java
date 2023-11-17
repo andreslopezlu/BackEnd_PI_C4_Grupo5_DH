@@ -6,6 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.grupo5.AlquilerEquiposConstruccion.dto.CityDTO;
 import com.grupo5.AlquilerEquiposConstruccion.service.impl.S3ServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/file")
@@ -45,15 +48,20 @@ public class S3Controller {
 
 
     @PostMapping("/upload/{id}")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Integer id) throws IOException {
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile[] file, @PathVariable Integer id) throws IOException {
 
-        File convertedFile = convertMultiPartFileToFile(file);
-        String fileName = generateFileName(file);
-        s3ServiceImpl.uploadFile(fileName, convertedFile);
-        convertedFile.delete();
+        List<String> imagesUrls = new ArrayList<>();
 
-        String s3Url = amazonS3.getUrl(bucketName, fileName).toString();
-        return ResponseEntity.ok(s3Url);
+        for (MultipartFile f:
+             file) {
+            File convertedFile = convertMultiPartFileToFile(f);
+            String fileName = generateFileName(f);
+            s3ServiceImpl.uploadFile(fileName, convertedFile);
+            convertedFile.delete();
+            String s3Url = amazonS3.getUrl(bucketName, fileName).toString();
+            imagesUrls.add(s3Url);
+        }
+          return ResponseEntity.ok(imagesUrls);
     }
 
 
