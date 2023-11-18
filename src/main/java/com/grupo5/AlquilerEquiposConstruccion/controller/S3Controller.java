@@ -6,7 +6,19 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo5.AlquilerEquiposConstruccion.dto.CityDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.ImageDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
+import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
+import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
+import com.grupo5.AlquilerEquiposConstruccion.model.Image;
+import com.grupo5.AlquilerEquiposConstruccion.model.Product;
+import com.grupo5.AlquilerEquiposConstruccion.repository.ImageRepository;
+import com.grupo5.AlquilerEquiposConstruccion.repository.ProductRepository;
+import com.grupo5.AlquilerEquiposConstruccion.service.ImageService;
+import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
+import com.grupo5.AlquilerEquiposConstruccion.service.S3Service;
 import com.grupo5.AlquilerEquiposConstruccion.service.impl.S3ServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +32,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/file")
 public class S3Controller {
 
     @Autowired
-    private S3ServiceImpl s3ServiceImpl;
+    private S3Service s3Service;
+
+    @Autowired
+    private ImageService imageService;
+
+    @Autowired
+    private ProductService productService;
 
     @Value("${aws.s3.bucketName}")
     private String bucketName;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     AWSCredentials credentials = new BasicAWSCredentials(
             "AKIAY3PLHSUJCOQE5HPE",
@@ -48,20 +70,25 @@ public class S3Controller {
 
 
     @PostMapping("/upload/{id}")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile[] file, @PathVariable Integer id) throws IOException {
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile[] file, @PathVariable Integer id) throws IOException, NotFoundException, BadRequestException {
 
-        List<String> imagesUrls = new ArrayList<>();
+//        List<String> imagesUrls = new ArrayList<>();
+        List<ImageDTO> images = new ArrayList<>();
+        Optional<ProductDTO> productDTOFounded = productService.getProductById(id);
+        ProductDTO productDTO = productDTOFounded.get();
 
-        for (MultipartFile f:
-             file) {
+        for (MultipartFile f: file) {
             File convertedFile = convertMultiPartFileToFile(f);
             String fileName = generateFileName(f);
-            s3ServiceImpl.uploadFile(fileName, convertedFile);
+            s3Service.uploadFile(fileName, convertedFile);
             convertedFile.delete();
             String s3Url = amazonS3.getUrl(bucketName, fileName).toString();
-            imagesUrls.add(s3Url);
+            ImageDTO imageDTO = new ImageDTO(fileName, s3Url);
+            imageDTO.setProduct(productDTO);
+            imageService.saveImage(imageDTO);
+            images.add(imageDTO);
         }
-          return ResponseEntity.ok(imagesUrls);
+        return ResponseEntity.ok(images);
     }
 
 
