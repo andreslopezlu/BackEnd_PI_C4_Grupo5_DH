@@ -1,12 +1,17 @@
 package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo5.AlquilerEquiposConstruccion.dto.CategoryDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ImageDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
+import com.grupo5.AlquilerEquiposConstruccion.model.Category;
 import com.grupo5.AlquilerEquiposConstruccion.model.Image;
+import com.grupo5.AlquilerEquiposConstruccion.model.Product;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ImageRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.ImageService;
+import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +27,9 @@ public class ImageServiceImpl implements ImageService {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     ObjectMapper mapper;
@@ -49,6 +57,19 @@ public class ImageServiceImpl implements ImageService {
             throw new BadRequestException("The image has null values.");
         } else{
             Image imageCreated = mapper.convertValue(imageDTO, Image.class);
+            logger.info("The image was created successfully.");
+            return mapper.convertValue(imageRepository.save(imageCreated), ImageDTO.class);
+        }
+    }
+    @Override
+    public ImageDTO saveImageByProductId(ImageDTO imageDTO, Integer id) throws BadRequestException, NotFoundException {
+        if (imageDTO.getUrl()==null){
+            throw new BadRequestException("The image has null values.");
+        } else{
+            Image imageCreated = mapper.convertValue(imageDTO, Image.class);
+            Optional<ProductDTO> productDTO = productService.getProductById(id);
+            Product productEntity = mapper.convertValue(productDTO.get(), Product.class);
+            imageCreated.setProduct(productEntity);
             logger.info("The image was created successfully.");
             return mapper.convertValue(imageRepository.save(imageCreated), ImageDTO.class);
         }

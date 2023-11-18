@@ -10,6 +10,7 @@ public interface ImageService {
     List<ImageDTO> getAllImages();
     Optional<ImageDTO> getImageById(Integer id) throws NotFoundException;
     ImageDTO saveImage(ImageDTO imageDTO) throws BadRequestException;
+    ImageDTO saveImageByProductId(ImageDTO imageDTO, Integer id) throws BadRequestException, NotFoundException;
     ImageDTO updateImage(ImageDTO imageDTO, Integer id) throws NotFoundException;
     void deleteImageById(Integer id) throws NotFoundException;
 }

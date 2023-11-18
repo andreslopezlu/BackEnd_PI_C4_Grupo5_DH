@@ -29,10 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/file")
@@ -72,10 +69,7 @@ public class S3Controller {
     @PostMapping("/upload/{id}")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile[] file, @PathVariable Integer id) throws IOException, NotFoundException, BadRequestException {
 
-//        List<String> imagesUrls = new ArrayList<>();
-        List<ImageDTO> images = new ArrayList<>();
-        Optional<ProductDTO> productDTOFounded = productService.getProductById(id);
-        ProductDTO productDTO = productDTOFounded.get();
+        Map<String, String> imagesData = new HashMap<>();
 
         for (MultipartFile f: file) {
             File convertedFile = convertMultiPartFileToFile(f);
@@ -83,12 +77,17 @@ public class S3Controller {
             s3Service.uploadFile(fileName, convertedFile);
             convertedFile.delete();
             String s3Url = amazonS3.getUrl(bucketName, fileName).toString();
-            ImageDTO imageDTO = new ImageDTO(fileName, s3Url);
-            imageDTO.setProduct(productDTO);
-            imageService.saveImage(imageDTO);
-            images.add(imageDTO);
+            imagesData.put(fileName, s3Url);
         }
-        return ResponseEntity.ok(images);
+
+        for (Map.Entry<String, String> entry : imagesData.entrySet()) {
+            String name = entry.getKey();
+            String url = entry.getValue();
+            ImageDTO imageDTO = new ImageDTO(name, url);
+            imageService.saveImageByProductId(imageDTO, id);
+        }
+
+        return ResponseEntity.ok("ok");
     }
 
 

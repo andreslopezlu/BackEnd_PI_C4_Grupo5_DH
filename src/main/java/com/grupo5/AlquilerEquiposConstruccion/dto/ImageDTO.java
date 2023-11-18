@@ -5,6 +5,8 @@ public class ImageDTO {
     private String title;
     private String url;
 
+    private ProductDTO productDTO;
+
     public ImageDTO() {
     }
 
@@ -43,12 +45,21 @@ public class ImageDTO {
         this.url = url;
     }
 
+    public ProductDTO getProductDTO() {
+        return productDTO;
+    }
+
+    public void setProductDTO(ProductDTO productDTO) {
+        this.productDTO = productDTO;
+    }
+
     @Override
     public String toString() {
         return "ImageDTO{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", url='" + url + '\'' +
+                ", productDTO=" + productDTO +
                 '}';
     }
 }
