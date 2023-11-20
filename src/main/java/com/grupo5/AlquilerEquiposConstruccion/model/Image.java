@@ -1,17 +1,15 @@
 package com.grupo5.AlquilerEquiposConstruccion.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import lombok.ToString;
 
 @Entity
 @Table(name="image")
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id", scope = Image.class)
-@JsonIgnoreProperties(value = "product")
+@ToString
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +17,7 @@ public class Image {
     private String title;
     private String url;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="product_id", referencedColumnName = "id")
     @JsonIdentityReference(alwaysAsId = true)
     private Product product;
@@ -31,6 +29,13 @@ public class Image {
         this.id = id;
         this.title = title;
         this.url = url;
+    }
+
+    public Image(Integer id, String title, String url, Product product) {
+        this.id = id;
+        this.title = title;
+        this.url = url;
+        this.product = product;
     }
 
     public Integer getId() {

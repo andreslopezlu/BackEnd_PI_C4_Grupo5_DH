@@ -1,11 +1,11 @@
 package com.grupo5.AlquilerEquiposConstruccion.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="product")
-
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +27,8 @@ public class Product {
     private City city;
 
     @OneToMany (mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Image> image;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
