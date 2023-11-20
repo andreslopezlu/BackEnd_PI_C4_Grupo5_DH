@@ -1,21 +1,25 @@
 package com.grupo5.AlquilerEquiposConstruccion.controller;
 
-
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ImageDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.service.ImageService;
 import com.grupo5.AlquilerEquiposConstruccion.service.S3Service;
+import com.grupo5.AlquilerEquiposConstruccion.utils.FileManager;
+import com.grupo5.AlquilerEquiposConstruccion.utils.S3Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,14 +38,11 @@ public class ImageController {
     @Autowired
     private ObjectMapper mapper;
 
-    AWSCredentials credentials = new BasicAWSCredentials(
-            "AKIAY3PLHSUJCOQE5HPE",
-            "edla3tGu+0R/Yz4tUlT8eQETIKFFuN1u4Ph0md6t"
-    );
+    @Autowired
+    private FileManager fileManager;
 
-//    public ImageController(@Value("${aws.s3.bucketName}") String bucketName) {
-//        this.bucketName = bucketName;
-//    }
+    @Autowired
+    private S3Config s3Config;
 
     @GetMapping
     public ResponseEntity<List<ImageDTO>> getAllImages() throws NotFoundException {
@@ -63,9 +64,30 @@ public class ImageController {
         }
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> saveImage(@RequestBody ImageDTO imageDTO) throws BadRequestException {
-        return ResponseEntity.ok(imageService.saveImage(imageDTO));
+    @PostMapping("/create/{id}")
+    public ResponseEntity<?> saveImageByProductId(@RequestParam("file") MultipartFile[] file, @PathVariable Integer id) throws IOException, NotFoundException, BadRequestException {
+
+        Map<String, String> imagesData = new HashMap<>();
+
+        for (MultipartFile f: file) {
+            File convertedFile = fileManager.convertMultiPartFileToFile(f);
+            String fileName = fileManager.generateFileName(f);
+            s3Service.uploadFile(fileName, convertedFile);
+            convertedFile.delete();
+            String s3Url = s3Config.amazonS3().getUrl(bucketName, fileName).toString();
+            imagesData.put(fileName, s3Url);
+        }
+
+        for (Map.Entry<String, String> entry : imagesData.entrySet()) {
+            String name = entry.getKey();
+            String url = entry.getValue();
+            ImageDTO imageDTO = new ImageDTO(name, url);
+            imageService.saveImageByProductId(imageDTO, id);
+        }
+
+        List<ImageDTO> images = imageService.findByproduct_id(id);
+
+        return ResponseEntity.ok(images);
     }
 
     @PutMapping("/update")
@@ -88,4 +110,5 @@ public class ImageController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Image with id: " + id + " was not found.");
     }
+
 }
