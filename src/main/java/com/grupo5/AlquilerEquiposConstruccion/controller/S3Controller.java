@@ -47,9 +47,6 @@ public class S3Controller {
     @Value("${aws.s3.bucketName}")
     private String bucketName;
 
-    @Autowired
-    private ObjectMapper mapper;
-
     AWSCredentials credentials = new BasicAWSCredentials(
             "AKIAY3PLHSUJCOQE5HPE",
             "edla3tGu+0R/Yz4tUlT8eQETIKFFuN1u4Ph0md6t"
@@ -87,9 +84,10 @@ public class S3Controller {
             imageService.saveImageByProductId(imageDTO, id);
         }
 
-        return ResponseEntity.ok("ok");
-    }
+        List<ImageDTO> images = imageService.findByproduct_id(id);
 
+        return ResponseEntity.ok(images);
+    }
 
     private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
         File convertedFile = new File(file.getOriginalFilename());

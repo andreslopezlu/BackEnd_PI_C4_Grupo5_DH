@@ -1,24 +1,34 @@
 package com.grupo5.AlquilerEquiposConstruccion.dto;
 
+import com.grupo5.AlquilerEquiposConstruccion.model.Product;
+import lombok.ToString;
+
+@ToString
 public class ImageDTO {
     private Integer id;
     private String title;
     private String url;
-
-    private ProductDTO productDTO;
+    private Product product;
 
     public ImageDTO() {
     }
 
-    public ImageDTO(Integer id, String title, String url) {
+    public ImageDTO(Integer id, String title, String url, Product product) {
         this.id = id;
         this.title = title;
         this.url = url;
+        this.product = product;
     }
 
     public ImageDTO(String title, String url) {
         this.title = title;
         this.url = url;
+    }
+
+    public ImageDTO(String title, String url, Product product) {
+        this.title = title;
+        this.url = url;
+        this.product = product;
     }
 
     public Integer getId() {
@@ -45,21 +55,12 @@ public class ImageDTO {
         this.url = url;
     }
 
-    public ProductDTO getProductDTO() {
-        return productDTO;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductDTO(ProductDTO productDTO) {
-        this.productDTO = productDTO;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    @Override
-    public String toString() {
-        return "ImageDTO{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", url='" + url + '\'' +
-                ", productDTO=" + productDTO +
-                '}';
-    }
 }

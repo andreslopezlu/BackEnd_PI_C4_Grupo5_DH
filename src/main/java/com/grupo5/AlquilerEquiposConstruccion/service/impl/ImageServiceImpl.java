@@ -1,12 +1,10 @@
 package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo5.AlquilerEquiposConstruccion.dto.CategoryDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ImageDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Category;
 import com.grupo5.AlquilerEquiposConstruccion.model.Image;
 import com.grupo5.AlquilerEquiposConstruccion.model.Product;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ImageRepository;
@@ -37,6 +35,16 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public List<ImageDTO> getAllImages() {
         List<Image> images = imageRepository.findAll();
+        List<ImageDTO> imagesDTO = new ArrayList<>();
+        for(Image image : images){
+            imagesDTO.add(mapper.convertValue(image, ImageDTO.class));
+        }
+        return imagesDTO;
+    }
+
+    @Override
+    public List<ImageDTO> findByproduct_id(Integer id) {
+        List<Image> images = imageRepository.findByproduct_id(id);
         List<ImageDTO> imagesDTO = new ArrayList<>();
         for(Image image : images){
             imagesDTO.add(mapper.convertValue(image, ImageDTO.class));

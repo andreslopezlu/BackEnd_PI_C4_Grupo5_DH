@@ -8,7 +8,7 @@ public interface S3Service {
 
     void uploadFile(String key, File file);
 
-    S3Object downloadFile(String key);
-
     void deleteFile(String key);
+
+    //    S3Object downloadFile(String key);
 }

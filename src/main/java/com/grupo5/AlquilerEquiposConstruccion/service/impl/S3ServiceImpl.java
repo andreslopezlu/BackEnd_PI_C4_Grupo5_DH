@@ -40,13 +40,11 @@ public class S3ServiceImpl implements S3Service {
         amazonS3.putObject(bucketName, key, file);
     }
 
-
     public void deleteFile(String key) {
         amazonS3.deleteObject(bucketName, key);
     }
 
-
-    public S3Object downloadFile(String key) {
-        return amazonS3.getObject(bucketName, key);
-    }
+//    public S3Object downloadFile(String key) {
+//        return amazonS3.getObject(bucketName, key);
+//    }
 }
