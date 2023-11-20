@@ -13,8 +13,8 @@ public class LoginDTOResponse {
     @Override
     public String toString() {
         return "{" +
-                "jwt:'" + jwt + '\'' +
-                ", rol:'" + rol + '\'' +
+                "jwt:\"" + jwt + '\"' +
+                ", rol:\"" + rol + '\"' +
                 '}';
     }
 }

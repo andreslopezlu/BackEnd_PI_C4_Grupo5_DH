@@ -64,7 +64,7 @@ public class ReservationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ReservationDTO> updateReservation(@RequestBody ReservationDTO reservationDTO, @PathVariable Integer id) {
         try {
             ReservationDTO updatedReservation = reservationService.updateReservation(reservationDTO, id);
@@ -74,7 +74,7 @@ public class ReservationController {
         }
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Integer id) {
         reservationService.deleteReservationById(id);
         return ResponseEntity.noContent().build();
