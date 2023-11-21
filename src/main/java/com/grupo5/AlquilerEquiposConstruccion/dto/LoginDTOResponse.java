@@ -1,20 +1,17 @@
 package com.grupo5.AlquilerEquiposConstruccion.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class LoginDTOResponse {
 
+    @JsonProperty("jwt")
     private String jwt;
-    private String rol;
 
-    public LoginDTOResponse(String jwt, String rol) {
+    @JsonProperty("role")
+    private String role;
+
+    public LoginDTOResponse(String jwt, String role) {
         this.jwt = jwt;
-        this.rol = rol;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "jwt:\"" + jwt + '\"' +
-                ", rol:\"" + rol + '\"' +
-                '}';
+        this.role = role;
     }
 }

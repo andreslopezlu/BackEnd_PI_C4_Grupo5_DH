@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDto) throws NotFoundException {
+    public ResponseEntity<LoginDTOResponse> login(@RequestBody LoginDTO loginDto) throws NotFoundException {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(login);
 
@@ -48,12 +48,10 @@ public class AuthController {
 
         LoginDTOResponse response = new LoginDTOResponse(jwt, role);
 
-
-        if(jwt != null){
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).body(response.toString());
+        if (jwt != null) {
+            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).body(response);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with username: " + loginDto.getUsername() + " was not found.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
     }
 }
