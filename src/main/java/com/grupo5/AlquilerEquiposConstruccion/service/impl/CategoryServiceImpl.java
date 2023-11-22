@@ -49,9 +49,20 @@ public class CategoryServiceImpl implements CategoryService {
         return Optional.ofNullable(mapper.convertValue(categoryFounded, CategoryDTO.class));
     }
 
+//    @Override
+//    public CategoryDTO createCategory(CategoryDTO category) throws BadRequestException {
+//        if (category.getName()==null || category.getDescription()==null || category.getUrlImage()==null){
+//            throw new BadRequestException("The category has null values.");
+//        } else{
+//            Category categoryCreated = mapper.convertValue(category, Category.class);
+//            logger.info("The category was created successfully.");
+//            return mapper.convertValue(categoryRepository.save(categoryCreated), CategoryDTO.class);
+//        }
+//    }
+
     @Override
     public CategoryDTO createCategory(CategoryDTO category) throws BadRequestException {
-        if (category.getName()==null || category.getDescription()==null || category.getUrlImage()==null){
+        if (category.getName()==null || category.getDescription()==null){
             throw new BadRequestException("The category has null values.");
         } else{
             Category categoryCreated = mapper.convertValue(category, Category.class);
@@ -59,6 +70,20 @@ public class CategoryServiceImpl implements CategoryService {
             return mapper.convertValue(categoryRepository.save(categoryCreated), CategoryDTO.class);
         }
     }
+
+//    @Override
+//    public CategoryDTO updateCategory(CategoryDTO category, Integer id) throws NotFoundException {
+//        Optional<CategoryDTO> existingCategory = getCategoryById(id);
+//        if (existingCategory.isPresent()){
+//            existingCategory.get().setName(category.getName());
+//            existingCategory.get().setDescription(category.getDescription());
+//            existingCategory.get().setUrlImage(category.getUrlImage());
+//            Category categoryUpdated = mapper.convertValue(existingCategory, Category.class);
+//            categoryRepository.save(categoryUpdated);
+//            logger.info("The category was updated successfully.");
+//        }
+//        return mapper.convertValue(existingCategory, CategoryDTO.class);
+//    }
 
     @Override
     public CategoryDTO updateCategory(CategoryDTO category, Integer id) throws NotFoundException {
