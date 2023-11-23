@@ -16,11 +16,17 @@ public class ProductDTO {
     private Double average_score;
     private Double costPerDay;
 
+    private CityDTO city;
+
+    private CategoryDTO category;
+
+    String policiesCancellation;
+
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Integer id, String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay) {
+    public ProductDTO(Integer id, String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -29,9 +35,12 @@ public class ProductDTO {
         this.available = available;
         this.average_score = average_score;
         this.costPerDay = costPerDay;
+        this.city = city;
+        this.category = category;
+        this.policiesCancellation = policiesCancellation;
     }
 
-    public ProductDTO(String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay) {
+    public ProductDTO(String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation) {
         this.name = name;
         this.description = description;
         this.specifications = specifications;
@@ -39,6 +48,9 @@ public class ProductDTO {
         this.available = available;
         this.average_score = average_score;
         this.costPerDay = costPerDay;
+        this.city = city;
+        this.category = category;
+        this.policiesCancellation = policiesCancellation;
     }
 
     public Integer getId() {
@@ -105,6 +117,29 @@ public class ProductDTO {
         this.costPerDay = costPerDay;
     }
 
+    public CityDTO getCity() {
+        return city;
+    }
+
+    public void setCity(CityDTO city) {
+        this.city = city;
+    }
+
+    public CategoryDTO getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryDTO category) {
+        this.category = category;
+    }
+
+    public String getPoliciesCancellation() {
+        return policiesCancellation;
+    }
+
+    public void setPoliciesCancellation(String policiesCancellation) {
+        this.policiesCancellation = policiesCancellation;
+    }
 
     @Override
     public String toString() {
@@ -117,6 +152,9 @@ public class ProductDTO {
                 ", available=" + available +
                 ", average_score=" + average_score +
                 ", costPerDay=" + costPerDay +
+                ", city=" + city +
+                ", category=" + category +
+                ", policiesCancellation='" + policiesCancellation + '\'' +
                 '}';
     }
 }

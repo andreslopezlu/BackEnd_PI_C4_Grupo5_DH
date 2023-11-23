@@ -45,9 +45,21 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findByActiveTrue();
         List<ProductDTO> productsDTO = new ArrayList<>();
-        for (Product product : products){
-            productsDTO.add(mapper.convertValue(product,ProductDTO.class));
+
+        for (Product product : products) {
+            ProductDTO productDTO = mapper.convertValue(product, ProductDTO.class);
+
+            CityDTO cityDTO = mapper.convertValue(product.getCity(), CityDTO.class);
+            CategoryDTO categoryDTO = mapper.convertValue(product.getCategory(), CategoryDTO.class);
+
+            productDTO.setCity(cityDTO);
+            productDTO.setCategory(categoryDTO);
+
+            productDTO.setPoliciesCancellation("Agregue las fechas de su reservación para obtener los detalles de cancelación de este producto.");
+
+            productsDTO.add(productDTO);
         }
+
         return productsDTO;
     }
 
@@ -55,7 +67,16 @@ public class ProductServiceImpl implements ProductService {
     public Optional<ProductDTO> getProductById(Integer id) throws NotFoundException {
         Product productFounded = productRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
                 "product with the id: " + id + " was not found."));
-        return Optional.ofNullable(mapper.convertValue(productFounded, ProductDTO.class));
+        CityDTO cityDTO = mapper.convertValue(productFounded.getCity(), CityDTO.class);
+        CategoryDTO categoryDTO = mapper.convertValue(productFounded.getCategory(), CategoryDTO.class);
+
+        ProductDTO productDTO = mapper.convertValue(productFounded, ProductDTO.class);
+
+        productDTO.setCity(cityDTO);
+        productDTO.setCategory(categoryDTO);
+        productDTO.setPoliciesCancellation("Agregue las fechas de su reservación para obtener los detalles de cancelación de este producto.");
+
+        return Optional.ofNullable(productDTO);
     }
 
     @Override
