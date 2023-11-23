@@ -10,13 +10,20 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    @Query("SELECT p FROM Product p WHERE p.category.name = :categoryName")
-    List<Product> findByCategoryName(@Param("categoryName") String categoryName);
+    @Query("SELECT p FROM Product p WHERE p.category.name = :categoryName AND p.active = true")
+    List<Product> findByCategoryNameAndActiveTrue(@Param("categoryName") String categoryName);
 
-    @Query("SELECT p FROM Product p WHERE p.city.name = :cityName")
-    List<Product> findByCityName(@Param("cityName") String cityName);
+    @Query("SELECT p FROM Product p WHERE p.city.name = :cityName AND p.active = true")
+    List<Product> findByCityNameAndActiveTrue(@Param("cityName") String cityName);
 
-    @Query("SELECT p FROM Product p WHERE p.name LIKE %:name%")
-    List<Product> findByProductNameContaining(@Param("name") String name);
+    @Query("SELECT p FROM Product p WHERE p.name LIKE %:name% AND p.active = true")
+    List<Product> findByProductNameContainingAndActiveTrue(@Param("name") String name);
+
+    List<Product> findByActiveTrue();
+
+    @Query("SELECT p FROM Product p WHERE p.id IN :ids AND p.active = true")
+    List<Product> findByIdAndActiveTrue(@Param("ids") Iterable<Integer> ids);
+
+    long countByActiveTrue();
 }
 

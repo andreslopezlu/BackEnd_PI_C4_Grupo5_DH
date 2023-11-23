@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getAllProducts() {
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productRepository.findByActiveTrue();
         List<ProductDTO> productsDTO = new ArrayList<>();
         for (Product product : products){
             productsDTO.add(mapper.convertValue(product,ProductDTO.class));
@@ -117,10 +117,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProductById(Integer id) throws NotFoundException {
-        Optional<ProductDTO> productFounded = getProductById(id);
+        Optional<Product> productFounded = productRepository.findById(id);
         if (productFounded.isPresent()) {
-            Product product = mapper.convertValue(productFounded, Product.class);
+            Product product = productFounded.get();
             product.setActive(false);
+            product.setAvailable(false);
             productRepository.save(product);
         } else {
             throw new NotFoundException("The product with ID " + id + " was not found.");
@@ -130,7 +131,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getProductsByCategory(String name) {
 
-        List<Product> productsByCategory = productRepository.findByCategoryName(name);
+        List<Product> productsByCategory = productRepository.findByCategoryNameAndActiveTrue(name);
 
         List<ProductDTO> productDTOList = productsByCategory.stream()
                 .map(product -> mapper.convertValue(product, ProductDTO.class))
@@ -140,7 +141,7 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public List<ProductDTO> getProductsByCity(String name) {
-        List<Product> productsByCity = productRepository.findByCityName(name);
+        List<Product> productsByCity = productRepository.findByCityNameAndActiveTrue(name);
 
         List<ProductDTO> productDTOList = productsByCity.stream()
                 .map(product -> mapper.convertValue(product, ProductDTO.class))
@@ -150,7 +151,7 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public List<ProductDTO> getRandomProduct() {
-        long totalProducts = productRepository.count();
+        long totalProducts = productRepository.countByActiveTrue();
 
         Set<Integer> randomIndexes = new HashSet<>();
         Random random = new Random();
@@ -159,7 +160,7 @@ public class ProductServiceImpl implements ProductService {
             randomIndexes.add(randomIndex);
         }
 
-        List<Product> randomProducts = productRepository.findAllById(randomIndexes);
+        List<Product> randomProducts = productRepository.findByIdAndActiveTrue(randomIndexes);
 
         return randomProducts.stream()
                 .map(product -> mapper.convertValue(product, ProductDTO.class))
@@ -167,7 +168,7 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public List<ProductDTO> getAllSuggestionsProducts(String input) {
-        List<Product> productNameContaining = productRepository.findByProductNameContaining(input);
+        List<Product> productNameContaining = productRepository.findByProductNameContainingAndActiveTrue(input);
 
         List<ProductDTO> productDTOList = productNameContaining.stream()
                 .map(product -> mapper.convertValue(product, ProductDTO.class))
