@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/user/update/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.POST, "/images/create/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/images/delete/*")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/images/delete/all/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.POST, "/categories/create")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/categories/update")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/categories/delete/*")).hasRole("ADMIN")

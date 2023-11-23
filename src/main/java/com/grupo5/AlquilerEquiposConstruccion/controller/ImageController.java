@@ -5,9 +5,11 @@ import com.grupo5.AlquilerEquiposConstruccion.dto.ImageDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.service.ImageService;
+import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
 import com.grupo5.AlquilerEquiposConstruccion.service.S3Service;
 import com.grupo5.AlquilerEquiposConstruccion.utils.FileManager;
 import com.grupo5.AlquilerEquiposConstruccion.utils.S3Config;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,9 @@ public class ImageController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private S3Service s3Service;
@@ -109,6 +114,15 @@ public class ImageController {
             return ResponseEntity.ok("The image with id: " + id + " was deleted successfully.");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Image with id: " + id + " was not found.");
+    }
+
+    @DeleteMapping("/delete/all/{id}")
+    public ResponseEntity<String> deleteAllByProduct_id(@PathVariable Integer id) throws NotFoundException {
+        if (productService.getProductById(id).isPresent()) {
+            imageService.deleteByProduct_id(id);
+            return ResponseEntity.ok("The images of the product with id: " + id + " were successfully deleted.");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product with id: " + id + " was not found.");
     }
 
 }

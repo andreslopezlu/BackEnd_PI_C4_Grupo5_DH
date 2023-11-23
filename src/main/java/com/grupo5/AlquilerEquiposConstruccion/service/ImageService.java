@@ -15,4 +15,5 @@ public interface ImageService {
     ImageDTO saveImageByProductId(ImageDTO imageDTO, Integer id) throws BadRequestException, NotFoundException;
     ImageDTO updateImage(ImageDTO imageDTO, Integer id) throws NotFoundException;
     void deleteImageById(Integer id) throws NotFoundException;
+    void deleteByProduct_id(Integer id) throws NotFoundException;
 }
