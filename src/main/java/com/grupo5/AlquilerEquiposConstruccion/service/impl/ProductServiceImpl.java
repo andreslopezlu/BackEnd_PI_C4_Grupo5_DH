@@ -165,4 +165,15 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> mapper.convertValue(product, ProductDTO.class))
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<ProductDTO> getAllSuggestionsProducts(String input) {
+        List<Product> productNameContaining = productRepository.findByProductNameContaining(input);
+
+        List<ProductDTO> productDTOList = productNameContaining.stream()
+                .map(product -> mapper.convertValue(product, ProductDTO.class))
+                .collect(Collectors.toList());
+
+        return productDTOList;
+    }
+
 }

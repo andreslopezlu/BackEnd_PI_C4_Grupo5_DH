@@ -91,7 +91,10 @@ public class ProductController {
         }
     }
 
-
+    @GetMapping("/by-input/{input}")
+    public ResponseEntity<List<ProductDTO>> getSuggestionsProducts(@PathVariable String input){
+        return ResponseEntity.ok(productService.getAllSuggestionsProducts(input));
+    }
 
 
 }

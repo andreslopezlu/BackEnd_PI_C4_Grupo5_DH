@@ -17,5 +17,6 @@ public interface ProductService {
     List<ProductDTO>getProductsByCategory(String name)throws NotFoundException;
     List<ProductDTO>getProductsByCity(String name) throws NotFoundException;
     List<ProductDTO> getRandomProduct();
+    List<ProductDTO> getAllSuggestionsProducts(String input);
 
 }
