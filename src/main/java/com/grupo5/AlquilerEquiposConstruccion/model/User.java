@@ -2,7 +2,6 @@ package com.grupo5.AlquilerEquiposConstruccion.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -34,6 +33,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Reservation> reservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Favorite> favorites = new HashSet<>();
 
     public User() {
     }

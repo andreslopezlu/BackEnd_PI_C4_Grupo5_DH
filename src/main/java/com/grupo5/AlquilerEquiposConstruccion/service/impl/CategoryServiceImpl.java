@@ -8,6 +8,7 @@ import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Category;
 import com.grupo5.AlquilerEquiposConstruccion.repository.CategoryRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.CategoryService;
+import org.apache.log4j.Logger;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.apache.log4j.Logger;
 
 
 @Service

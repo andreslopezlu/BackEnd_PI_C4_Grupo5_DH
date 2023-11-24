@@ -2,12 +2,9 @@ package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo5.AlquilerEquiposConstruccion.dto.RoleDTO;
-import com.grupo5.AlquilerEquiposConstruccion.dto.UserDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Role;
-import com.grupo5.AlquilerEquiposConstruccion.model.User;
 import com.grupo5.AlquilerEquiposConstruccion.repository.RoleRepository;
-import com.grupo5.AlquilerEquiposConstruccion.repository.UserRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.RoleService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

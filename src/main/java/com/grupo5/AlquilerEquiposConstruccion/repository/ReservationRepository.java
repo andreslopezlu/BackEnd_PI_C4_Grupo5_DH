@@ -2,8 +2,9 @@ package com.grupo5.AlquilerEquiposConstruccion.repository;
 
 import com.grupo5.AlquilerEquiposConstruccion.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository

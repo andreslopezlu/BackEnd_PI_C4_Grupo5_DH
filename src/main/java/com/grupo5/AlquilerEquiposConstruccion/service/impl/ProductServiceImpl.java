@@ -10,7 +10,6 @@ import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Category;
 import com.grupo5.AlquilerEquiposConstruccion.model.City;
 import com.grupo5.AlquilerEquiposConstruccion.model.Product;
-import com.grupo5.AlquilerEquiposConstruccion.repository.CategoryRepository;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ProductRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
 import org.apache.log4j.Logger;

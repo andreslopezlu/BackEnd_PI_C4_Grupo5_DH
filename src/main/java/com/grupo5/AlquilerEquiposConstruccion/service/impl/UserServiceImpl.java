@@ -10,14 +10,14 @@ import com.grupo5.AlquilerEquiposConstruccion.model.User;
 import com.grupo5.AlquilerEquiposConstruccion.repository.UserRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.EmailService;
 import com.grupo5.AlquilerEquiposConstruccion.service.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.apache.log4j.Logger;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {

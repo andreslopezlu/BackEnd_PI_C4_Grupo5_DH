@@ -43,6 +43,10 @@ public class Product {
     @JsonIgnore
     private Set<Reservation> reservations = new HashSet<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Favorite> favorites = new HashSet<>();
+
     public Product() {
     }
 

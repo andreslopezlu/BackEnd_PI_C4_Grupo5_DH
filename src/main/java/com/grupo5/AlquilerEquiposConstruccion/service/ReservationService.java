@@ -2,7 +2,7 @@ package com.grupo5.AlquilerEquiposConstruccion.service;
 
 import com.grupo5.AlquilerEquiposConstruccion.dto.ReservationDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Reservation;
+
 import java.util.List;
 import java.util.Optional;
 

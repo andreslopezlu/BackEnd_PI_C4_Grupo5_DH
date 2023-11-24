@@ -9,7 +9,6 @@ import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
 import com.grupo5.AlquilerEquiposConstruccion.service.S3Service;
 import com.grupo5.AlquilerEquiposConstruccion.utils.FileManager;
 import com.grupo5.AlquilerEquiposConstruccion.utils.S3Config;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

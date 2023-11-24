@@ -4,7 +4,7 @@ import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTORequest;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Product;
+
 import java.util.List;
 import java.util.Optional;
 
