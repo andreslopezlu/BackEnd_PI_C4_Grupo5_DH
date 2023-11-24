@@ -10,6 +10,7 @@ import com.grupo5.AlquilerEquiposConstruccion.model.Product;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ImageRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.ImageService;
 import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
+import jakarta.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,6 +101,16 @@ public class ImageServiceImpl implements ImageService {
         imageRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
                 "image with the id: " + id + " was not found."));
         imageRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByProduct_id(Integer id) throws NotFoundException {
+        if (imageRepository.findByproduct_id(id).isEmpty()) {
+            throw new NotFoundException("The " +
+                    "product with the id: " + id + " was not found.");
+        }
+        imageRepository.deleteByProduct_id(id);
     }
 
 }
