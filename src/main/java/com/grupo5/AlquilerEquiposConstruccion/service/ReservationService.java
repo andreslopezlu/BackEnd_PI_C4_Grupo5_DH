@@ -12,7 +12,7 @@ public interface ReservationService {
     List<ReservationDTO> getAllReservation();
     Optional<ReservationDTO> getReservationById(Integer id) throws NotFoundException;
     ReservationDTO saveReservation(ReservationDTO reservationDTO);
-    ReservationDTO updateReservation(ReservationDTO reservationDTO, Integer id) throws NotFoundException;
+    ReservationDTO updateReservation(ReservationDTO reservationDTO) throws NotFoundException;
     void deleteReservationById(Integer reservation);
 
 }

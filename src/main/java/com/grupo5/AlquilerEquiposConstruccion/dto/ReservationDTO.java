@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.grupo5.AlquilerEquiposConstruccion.model.Product;
+import com.grupo5.AlquilerEquiposConstruccion.model.User;
 
 import java.time.LocalDate;
 
@@ -17,20 +19,28 @@ public class ReservationDTO {
     private LocalDate checkout_date;
     private String comments;
 
+    private Product product;
+
+    private User user;
+
     public ReservationDTO() {
     }
 
-    public ReservationDTO(Integer id, LocalDate check_in_date, LocalDate checkout_date, String comments) {
+    public ReservationDTO(Integer id, LocalDate check_in_date, LocalDate checkout_date, String comments, Product product, User user) {
         this.id = id;
         this.check_in_date = check_in_date;
         this.checkout_date = checkout_date;
         this.comments = comments;
+        this.product = product;
+        this.user = user;
     }
 
-    public ReservationDTO(LocalDate check_in_date, LocalDate checkout_date, String comments) {
+    public ReservationDTO(LocalDate check_in_date, LocalDate checkout_date, String comments, Product product, User user) {
         this.check_in_date = check_in_date;
         this.checkout_date = checkout_date;
         this.comments = comments;
+        this.product = product;
+        this.user = user;
     }
 
     public Integer getId() {
@@ -65,6 +75,22 @@ public class ReservationDTO {
         this.comments = comments;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "ReservationDTO{" +
@@ -72,6 +98,8 @@ public class ReservationDTO {
                 ", check_in_date=" + check_in_date +
                 ", checkout_date=" + checkout_date +
                 ", comments='" + comments + '\'' +
+                ", product=" + product +
+                ", user=" + user +
                 '}';
     }
 }
