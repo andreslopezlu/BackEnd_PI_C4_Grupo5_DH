@@ -1,7 +1,5 @@
 package com.grupo5.AlquilerEquiposConstruccion.service;
 
-import com.amazonaws.services.s3.model.S3Object;
-
 import java.io.File;
 
 public interface S3Service {

@@ -4,8 +4,7 @@ import com.grupo5.AlquilerEquiposConstruccion.dto.RoleDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.UserDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Role;
-import com.grupo5.AlquilerEquiposConstruccion.model.User;
+
 import java.util.List;
 import java.util.Optional;
 
