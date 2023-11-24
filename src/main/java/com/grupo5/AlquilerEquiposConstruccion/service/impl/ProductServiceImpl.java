@@ -112,6 +112,10 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.get().setName(product.getName());
             existingProduct.get().setDescription(product.getDescription());
             existingProduct.get().setSpecifications(product.getSpecifications());
+            existingProduct.get().setActive(product.isActive());
+            existingProduct.get().setAvailable(product.isAvailable());
+            existingProduct.get().setAverage_score(product.getAverage_score());
+            existingProduct.get().setCostPerDay(product.getCostPerDay());
             Product productUpdated = mapper.convertValue(existingProduct, Product.class);
             Optional<CategoryDTO> category = categoryService.getCategoryById(product.getCategory_id());
             if (category.isPresent()) {

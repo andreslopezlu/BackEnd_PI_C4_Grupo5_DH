@@ -157,4 +157,5 @@ public class ProductDTO {
                 ", policiesCancellation='" + policiesCancellation + '\'' +
                 '}';
     }
+
 }
