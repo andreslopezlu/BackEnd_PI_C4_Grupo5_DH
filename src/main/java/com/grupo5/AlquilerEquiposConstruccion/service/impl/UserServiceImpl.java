@@ -45,6 +45,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<UserDTO> findByEmail(String email) throws NotFoundException {
+        User userFounded = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("The " +
+                "user with the email: " + email + " was not found."));
+        return Optional.ofNullable(mapper.convertValue(userFounded, UserDTO.class));
+    }
+
+    @Override
     public Optional<UserDTO> getUserById(Integer id) throws NotFoundException {
         User userFounded = userRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
                 "user with the id: " + id + " was not found."));

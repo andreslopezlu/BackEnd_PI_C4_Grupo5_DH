@@ -16,5 +16,6 @@ public interface UserService {
     UserDTO updateUser(UserDTO userDTO, Integer id) throws NotFoundException;
     void deleteUserById(Integer id) throws NotFoundException;
     RoleDTO getRoleByUsername(String username) throws NotFoundException;
+    Optional<UserDTO> findByEmail(String email) throws NotFoundException;
 
     }
