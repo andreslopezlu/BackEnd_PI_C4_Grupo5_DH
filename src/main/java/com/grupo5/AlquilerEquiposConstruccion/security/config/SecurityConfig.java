@@ -47,6 +47,8 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.GET, "/images/**")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/reservations")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET,"/reservations/by-product/*")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/user")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/user/by-email/*")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/user/update/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.POST, "/images/create/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/images/delete/*")).hasRole("ADMIN")
