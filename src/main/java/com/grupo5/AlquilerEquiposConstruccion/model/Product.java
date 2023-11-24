@@ -2,7 +2,10 @@ package com.grupo5.AlquilerEquiposConstruccion.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="product")
@@ -36,6 +39,9 @@ public class Product {
     @Column(name= "cancellation_policies")
     private String policiesCancellation;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Reservation> reservations = new HashSet<>();
 
     public Product() {
     }

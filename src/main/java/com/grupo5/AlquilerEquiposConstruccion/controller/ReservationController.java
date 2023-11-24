@@ -64,10 +64,10 @@ public class ReservationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ReservationDTO> updateReservation(@RequestBody ReservationDTO reservationDTO, @PathVariable Integer id) {
+    @PutMapping("/update")
+    public ResponseEntity<ReservationDTO> updateReservation(@RequestBody ReservationDTO reservationDTO) {
         try {
-            ReservationDTO updatedReservation = reservationService.updateReservation(reservationDTO, id);
+            ReservationDTO updatedReservation = reservationService.updateReservation(reservationDTO);
             return ResponseEntity.ok(updatedReservation);
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
