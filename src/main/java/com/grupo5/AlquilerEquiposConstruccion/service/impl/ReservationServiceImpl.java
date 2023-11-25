@@ -66,12 +66,15 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
-    public ReservationDTO updateReservation(ReservationDTO reservationDTO, Integer id) throws NotFoundException {
+    public ReservationDTO updateReservation(ReservationDTO reservationDTO) throws NotFoundException {
+        Integer id = reservationDTO.getId();
         Optional<ReservationDTO> existingReservation = getReservationById(id);
         if (existingReservation.isPresent()){
             existingReservation.get().setCheck_in_date(reservationDTO.getCheck_in_date());
             existingReservation.get().setCheckout_date(reservationDTO.getCheckout_date());
             existingReservation.get().setComments(reservationDTO.getComments());
+            existingReservation.get().setUser(reservationDTO.getUser());
+            existingReservation.get().setProduct(reservationDTO.getProduct());
             Reservation reservation = mapper.convertValue(reservationDTO, Reservation.class);
             reservationRepository.save(reservation);
             logger.info("The reservation was updated successfully.");

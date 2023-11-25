@@ -2,6 +2,7 @@ package com.grupo5.AlquilerEquiposConstruccion.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity

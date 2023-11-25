@@ -1,7 +1,5 @@
 package com.grupo5.AlquilerEquiposConstruccion.dto;
 
-import com.grupo5.AlquilerEquiposConstruccion.model.Category;
-
 public class CategoryDTO {
 
     private Integer id;

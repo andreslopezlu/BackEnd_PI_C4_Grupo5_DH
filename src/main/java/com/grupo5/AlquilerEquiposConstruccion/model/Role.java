@@ -1,6 +1,7 @@
 package com.grupo5.AlquilerEquiposConstruccion.model;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity

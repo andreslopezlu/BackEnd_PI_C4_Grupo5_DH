@@ -3,7 +3,7 @@ package com.grupo5.AlquilerEquiposConstruccion.service;
 import com.grupo5.AlquilerEquiposConstruccion.dto.CityDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.City;
+
 import java.util.List;
 import java.util.Optional;
 

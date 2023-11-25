@@ -10,7 +10,6 @@ import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Category;
 import com.grupo5.AlquilerEquiposConstruccion.model.City;
 import com.grupo5.AlquilerEquiposConstruccion.model.Product;
-import com.grupo5.AlquilerEquiposConstruccion.repository.CategoryRepository;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ProductRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
 import org.apache.log4j.Logger;
@@ -112,6 +111,10 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.get().setName(product.getName());
             existingProduct.get().setDescription(product.getDescription());
             existingProduct.get().setSpecifications(product.getSpecifications());
+            existingProduct.get().setActive(product.isActive());
+            existingProduct.get().setAvailable(product.isAvailable());
+            existingProduct.get().setAverage_score(product.getAverage_score());
+            existingProduct.get().setCostPerDay(product.getCostPerDay());
             Product productUpdated = mapper.convertValue(existingProduct, Product.class);
             Optional<CategoryDTO> category = categoryService.getCategoryById(product.getCategory_id());
             if (category.isPresent()) {

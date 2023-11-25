@@ -1,6 +1,5 @@
 package com.grupo5.AlquilerEquiposConstruccion.dto;
 
-import com.grupo5.AlquilerEquiposConstruccion.model.Category;
 import jakarta.persistence.Column;
 
 public class ProductDTO {
@@ -157,4 +156,5 @@ public class ProductDTO {
                 ", policiesCancellation='" + policiesCancellation + '\'' +
                 '}';
     }
+
 }

@@ -4,8 +4,7 @@ import com.grupo5.AlquilerEquiposConstruccion.dto.RoleDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.UserDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Role;
-import com.grupo5.AlquilerEquiposConstruccion.model.User;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +15,6 @@ public interface UserService {
     UserDTO updateUser(UserDTO userDTO, Integer id) throws NotFoundException;
     void deleteUserById(Integer id) throws NotFoundException;
     RoleDTO getRoleByUsername(String username) throws NotFoundException;
+    Optional<UserDTO> findByEmail(String email) throws NotFoundException;
 
     }

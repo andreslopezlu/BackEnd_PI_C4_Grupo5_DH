@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo5.AlquilerEquiposConstruccion.dto.CategoryDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Category;
 import com.grupo5.AlquilerEquiposConstruccion.service.CategoryService;
 import com.grupo5.AlquilerEquiposConstruccion.service.S3Service;
 import com.grupo5.AlquilerEquiposConstruccion.utils.FileManager;
 import com.grupo5.AlquilerEquiposConstruccion.utils.S3Config;
-import jakarta.servlet.annotation.MultipartConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -22,8 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
-import static javax.swing.text.html.FormSubmitEvent.MethodType.POST;
 
 @RestController
 @RequestMapping("/categories")

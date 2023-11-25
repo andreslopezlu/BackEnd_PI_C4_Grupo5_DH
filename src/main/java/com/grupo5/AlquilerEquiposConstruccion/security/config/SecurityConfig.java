@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
@@ -45,6 +44,10 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.GET,"/products/**")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET,"/cities/**")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/images/**")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/reservations")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET,"/reservations/by-product/*")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/user")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/user/by-email/*")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/user/update/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.POST, "/images/create/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/images/delete/*")).hasRole("ADMIN")
@@ -52,7 +55,18 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.POST, "/categories/create")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/categories/update")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/categories/delete/*")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.GET,"/reservations")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.GET,"/reservations/*")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.GET,"/reservations/by-user/*")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.POST,"/reservations/create")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.PUT,"/reservations/update")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.DELETE,"/reservations/delete/*")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/favorites")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/favorites/*")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/favorites/create")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/favorites/update")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/favorites/delete/*")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.GET,"/favorites/by-product/*")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.GET,"/favorites/by-user/*")).hasAnyRole("ADMIN", "USER")
 //                        .requestMatchers(antMatcher(HttpMethod.GET, "/**")).hasAnyRole("ADMIN", "USER")
 //                        .requestMatchers(antMatcher(HttpMethod.POST, "/**")).hasRole("ADMIN")
 //                        .requestMatchers(antMatcher(HttpMethod.PUT, "/**")).hasRole("ADMIN")
