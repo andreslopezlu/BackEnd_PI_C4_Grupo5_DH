@@ -63,16 +63,16 @@ public class CategoryController {
 //        return ResponseEntity.ok(categoryService.createCategory(category));
 //    }
 
-    @PostMapping(path = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE ,MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<CategoryDTO> createCategory(@RequestPart("category") String category, @RequestPart("file") MultipartFile file) throws BadRequestException, IOException, IOException {
+    @PostMapping(path = "/create", consumes = {"*/*"})
+    public ResponseEntity<CategoryDTO> createCategory(@RequestPart("file") MultipartFile file, @RequestPart("category") CategoryDTO category) throws BadRequestException, IOException, IOException {
         File convertedFile = fileManager.convertMultiPartFileToFile(file);
         String fileName = fileManager.generateFileName(file);
         s3Service.uploadFile(fileName, convertedFile);
         convertedFile.delete();
         String s3Url = s3Config.amazonS3().getUrl(bucketName, fileName).toString();
-        CategoryDTO categoryJson = mapper.readValue(category, CategoryDTO.class);
-        categoryJson.setUrlImage(s3Url);
-        return ResponseEntity.ok(categoryService.createCategory(categoryJson));
+//        CategoryDTO categoryJson = mapper.readValue(category, CategoryDTO.class);
+        category.setUrlImage(s3Url);
+        return ResponseEntity.ok(categoryService.createCategory(category));
     }
 
 //    @PutMapping("/update")
@@ -87,7 +87,7 @@ public class CategoryController {
 //    }
 
     @PutMapping(path = "/update", consumes = {MediaType.APPLICATION_JSON_VALUE ,MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> updateCategory(@RequestPart("category") String category, @RequestParam("file") MultipartFile file) throws Exception{
+    public ResponseEntity<?> updateCategory(@RequestParam("file") MultipartFile file, @RequestPart("category") String category) throws Exception{
         CategoryDTO categoryJson = mapper.readValue(category, CategoryDTO.class);
         Optional<CategoryDTO> categorySearch = categoryService.getCategoryById(categoryJson.getId());
         String existentUrl = categoryService.getCategoryById(categoryJson.getId()).get().getUrlImage();
