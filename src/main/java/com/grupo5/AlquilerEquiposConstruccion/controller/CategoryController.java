@@ -63,14 +63,13 @@ public class CategoryController {
 //        return ResponseEntity.ok(categoryService.createCategory(category));
 //    }
 
-    @PostMapping(path = "/create", consumes = {"*/*"})
+    @PostMapping(path = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE ,MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<CategoryDTO> createCategory(@RequestPart("file") MultipartFile file, @RequestPart("category") CategoryDTO category) throws BadRequestException, IOException, IOException {
         File convertedFile = fileManager.convertMultiPartFileToFile(file);
         String fileName = fileManager.generateFileName(file);
         s3Service.uploadFile(fileName, convertedFile);
         convertedFile.delete();
         String s3Url = s3Config.amazonS3().getUrl(bucketName, fileName).toString();
-//        CategoryDTO categoryJson = mapper.readValue(category, CategoryDTO.class);
         category.setUrlImage(s3Url);
         return ResponseEntity.ok(categoryService.createCategory(category));
     }
@@ -87,23 +86,22 @@ public class CategoryController {
 //    }
 
     @PutMapping(path = "/update", consumes = {MediaType.APPLICATION_JSON_VALUE ,MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> updateCategory(@RequestParam("file") MultipartFile file, @RequestPart("category") String category) throws Exception{
-        CategoryDTO categoryJson = mapper.readValue(category, CategoryDTO.class);
-        Optional<CategoryDTO> categorySearch = categoryService.getCategoryById(categoryJson.getId());
-        String existentUrl = categoryService.getCategoryById(categoryJson.getId()).get().getUrlImage();
+    public ResponseEntity<?> updateCategory(@RequestParam("file") MultipartFile file, @RequestPart("category") CategoryDTO category) throws Exception{
+        Optional<CategoryDTO> categorySearch = categoryService.getCategoryById(category.getId());
+        String existentUrl = categoryService.getCategoryById(category.getId()).get().getUrlImage();
         if(categorySearch.isPresent() && file.isEmpty()){
-            categoryJson.setUrlImage(existentUrl);
-            return ResponseEntity.ok(categoryService.updateCategory(categoryJson, categoryJson.getId()));
+            category.setUrlImage(existentUrl);
+            return ResponseEntity.ok(categoryService.updateCategory(category, category.getId()));
         } if (categorySearch.isPresent() && !file.isEmpty()){
             File convertedFile = fileManager.convertMultiPartFileToFile(file);
             String fileName = fileManager.generateFileName(file);
             s3Service.uploadFile(fileName, convertedFile);
             convertedFile.delete();
             String s3Url = s3Config.amazonS3().getUrl(bucketName, fileName).toString();
-            categoryJson.setUrlImage(s3Url);
-            return ResponseEntity.ok(categoryService.updateCategory(categoryJson, categoryJson.getId()));
+            category.setUrlImage(s3Url);
+            return ResponseEntity.ok(categoryService.updateCategory(category, category.getId()));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category with id: " + categoryJson.getId() + " was not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category with id: " + category.getId() + " was not found.");
         }
 
     }
