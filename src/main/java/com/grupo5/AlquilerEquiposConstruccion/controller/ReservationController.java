@@ -59,7 +59,7 @@ public class ReservationController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ReservationDTO> createReservation(@RequestBody ReservationDTO reservationDTO) {
+    public ResponseEntity<ReservationDTO> createReservation(@RequestBody ReservationDTO reservationDTO) throws NotFoundException {
         ReservationDTO savedReservation = reservationService.saveReservation(reservationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
     }

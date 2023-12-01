@@ -28,6 +28,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) throws BadRequestException {
+        String encriptedPassword = passwordEncoder.encode(userDTO.getPassword());
+        userDTO.setPassword(encriptedPassword);
+//        userService.saveUser(userDTO);
+        return ResponseEntity.ok(userService.saveUser(userDTO));
+    }
+
     @GetMapping("/by-email/{email}")
     public ResponseEntity<UserDTO> findByEmail(@PathVariable String email) throws NotFoundException {
         Optional<UserDTO> userSearch = userService.findByEmail(email);
@@ -48,11 +56,14 @@ public class UserController {
         }
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> saveUser(@RequestBody UserDTO userDTO) throws BadRequestException {
-        String encriptedPassword = passwordEncoder.encode(userDTO.getPassword());
-        userDTO.setPassword(encriptedPassword);
-        userService.saveUser(userDTO);
-        return ResponseEntity.status(HttpStatus.OK).body("User with email: " + userDTO.getEmail() + " created successfully.");
+    @GetMapping("/confirmation/by-email/{email}")
+    public ResponseEntity<String> confirmationEmail(@PathVariable String email) throws NotFoundException {
+        if(userService.findByEmail(email).isPresent()){
+            userService.confirmationEmail(email);
+            return ResponseEntity.ok("The user with email " + email + " was found");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user with email " + email + " was not found");
+        }
     }
+
 }
