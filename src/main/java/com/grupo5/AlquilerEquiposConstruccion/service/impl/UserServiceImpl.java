@@ -34,6 +34,34 @@ public class UserServiceImpl implements UserService {
     EmailService emailService;
 
     @Override
+    public UserDTO saveUser(UserDTO userDTO) throws BadRequestException {
+        if (userDTO.getName() == null || userDTO.getLastName() == null || userDTO.getEmail() == null || userDTO.getPhoneNumber() == null || userDTO.getPassword() == null) {
+            throw new BadRequestException("The user has null values.");
+        }
+        Boolean isExistingUser = userRepository.findByEmail(userDTO.getEmail()).isPresent();
+        User userCreated;
+        if (isExistingUser) {
+            throw new BadRequestException("The user already exists.");
+        } else {
+            userCreated = mapper.convertValue(userDTO, User.class);
+            logger.info("The user was created successfully.");
+            userRepository.save(userCreated);
+        }
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(userDTO.getEmail());
+        mailMessage.setSubject("Registro completo en AlquiConstruye!");
+        mailMessage.setText("Bienvenido,\n\nHiciste el proceso de registro con el email: "
+                + userDTO.getEmail() + ".\n\n"
+                + "Para ingresar a tu cuenta haz click en el siguiente enlace: "
+                + "https://www.google.com/.\n\n"
+                + "Saludos desde G5 - C4 - DH.");
+        emailService.sendEmail(mailMessage);
+
+        return mapper.convertValue(userCreated, UserDTO.class);
+    }
+
+    @Override
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         List<UserDTO> usersDTO = new ArrayList<>();
@@ -45,13 +73,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDTO> findByEmail(String email) throws NotFoundException {
-        User userFounded = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("The " +
-                "user with the email: " + email + " was not found."));
-        return Optional.ofNullable(mapper.convertValue(userFounded, UserDTO.class));
-    }
-
-    @Override
     public Optional<UserDTO> getUserById(Integer id) throws NotFoundException {
         User userFounded = userRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
                 "user with the id: " + id + " was not found."));
@@ -59,29 +80,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(UserDTO userDTO) throws BadRequestException {
-        if (userDTO.getName()==null || userDTO.getLastName()==null || userDTO.getEmail()==null || userDTO.getPhoneNumber()==null || userDTO.getPassword()==null){
-            throw new BadRequestException("The user has null values.");
-        }
-        Boolean isExistingUser = userRepository.findByEmail(userDTO.getEmail()).isPresent();
-        if (isExistingUser){
-            throw new BadRequestException("The user already exists.");
-        } else{
-            User userCreated = mapper.convertValue(userDTO, User.class);
-            logger.info("The user was created successfully.");
-            mapper.convertValue(userRepository.save(userCreated), UserDTO.class);
-        }
-
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(userDTO.getEmail());
-        mailMessage.setSubject("Registro completo en AlquiConstruye!");
-        mailMessage.setText("Bienvenido, hiciste el proceso de registro con el email: "
-                + userDTO.getEmail()
-                + ". "
-                + "Para ingresar a tu cuenta haz click en el siguiente enlace: "
-                + "https://www.google.com/. "
-                + "Saludos desde G5 - C4 - DH");
-        emailService.sendEmail(mailMessage);
+    public Optional<UserDTO> findByEmail(String email) throws NotFoundException {
+        User userFounded = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("The " +
+                "user with the email: " + email + " was not found."));
+        return Optional.ofNullable(mapper.convertValue(userFounded, UserDTO.class));
     }
 
     @Override
@@ -112,6 +114,19 @@ public class UserServiceImpl implements UserService {
             return mapper.convertValue(role, RoleDTO.class);
         }
         throw new NotFoundException("User not found.");
+    }
+
+    @Override
+    public void confirmationEmail(String email) throws NotFoundException {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Registro completo en AlquiConstruye!");
+        mailMessage.setText("Bienvenido,\n\nHiciste el proceso de registro con el email: "
+                + email + ".\n\n"
+                + "Para ingresar a tu cuenta haz click en el siguiente enlace: "
+                + "https://www.google.com/.\n\n"
+                + "Saludos desde G5 - C4 - DH.");
+        emailService.sendEmail(mailMessage);
     }
 }
 
