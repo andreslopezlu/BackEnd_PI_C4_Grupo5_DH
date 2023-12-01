@@ -46,8 +46,9 @@ public class AuthController {
         String role = userService.getRoleByUsername(username).getName();
         String name = userService.findByEmail(username).get().getName();
         String lastName = userService.findByEmail(username).get().getLastName();
+        String email = userService.findByEmail(username).get().getEmail();
 
-        LoginDTOResponse response = new LoginDTOResponse(jwt, role, name, lastName);
+        LoginDTOResponse response = new LoginDTOResponse(jwt, role, name, lastName, email);
 
         if (jwt != null) {
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).body(response);
