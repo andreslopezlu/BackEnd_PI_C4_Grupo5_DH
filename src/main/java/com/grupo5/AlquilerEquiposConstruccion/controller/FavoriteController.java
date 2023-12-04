@@ -78,4 +78,24 @@ public class FavoriteController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @GetMapping("/by-user-and-product/{userId}/{productId}")
+    public ResponseEntity<FavoriteDTO> findByUser_idAndProduct_id(@PathVariable Integer userId, @PathVariable Integer productId) throws NotFoundException {
+        Optional<FavoriteDTO> favoriteSearch = favoriteService.findByUser_idAndProduct_id(userId, productId);
+        if (favoriteSearch.isPresent()) {
+            return ResponseEntity.ok(favoriteSearch.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @DeleteMapping("/by-user-and-product/{userId}/{productId}")
+    public ResponseEntity<String> deleteByUser_idAndProduct_id(@PathVariable Integer userId, @PathVariable Integer productId) throws NotFoundException {
+        Integer favoriteId = favoriteService.findByUser_idAndProduct_id(userId, productId).get().getId();
+        if (favoriteService.findByUser_idAndProduct_id(userId, productId).isPresent()) {
+            favoriteService.deleteByUser_idAndProduct_id(userId, productId);
+            return ResponseEntity.ok("The favorite with id: " + favoriteId + " was deleted successfully.");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Favorite with id: " + favoriteId + " was not found.");
+    }
 }

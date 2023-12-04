@@ -7,6 +7,7 @@ import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Favorite;
 import com.grupo5.AlquilerEquiposConstruccion.repository.FavoritesRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.FavoriteService;
+import jakarta.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,5 +88,20 @@ public class FavoriteServiceImpl implements FavoriteService {
         Favorite favoriteFounded = favoritesRepository.findByUser_id(id).orElseThrow(() -> new NotFoundException("The " +
                 "favorite for the user with the id: " + id + " was not found."));
         return Optional.ofNullable(mapper.convertValue(favoriteFounded, FavoriteDTO.class));
+    }
+
+    @Override
+    public Optional<FavoriteDTO> findByUser_idAndProduct_id(Integer userId, Integer productId) throws NotFoundException {
+        Favorite favoriteFounded = favoritesRepository.findByUser_idAndProduct_id(userId, productId).orElseThrow(() -> new NotFoundException("The " +
+                "favorite for the user with the id: " + userId + " and the product with the id " + productId + " was not found."));
+        return Optional.ofNullable(mapper.convertValue(favoriteFounded, FavoriteDTO.class));
+    }
+
+    @Override
+    @Transactional
+    public void deleteByUser_idAndProduct_id(Integer userId, Integer productId) throws NotFoundException {
+        favoritesRepository.findByUser_idAndProduct_id(userId, productId).orElseThrow(() -> new NotFoundException("The " +
+                "favorite for the user with the id: " + userId + " and the product with the id " + productId + " was not found."));
+        favoritesRepository.deleteByUser_idAndProduct_id(userId, productId);
     }
 }

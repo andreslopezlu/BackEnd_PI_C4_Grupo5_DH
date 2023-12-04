@@ -15,4 +15,6 @@ public interface FavoriteService {
     void deleteFavoriteById(Integer id) throws NotFoundException;
     Optional<FavoriteDTO> findByProduct_id(Integer id) throws NotFoundException;
     Optional<FavoriteDTO> findByUser_id(Integer id) throws NotFoundException;
+    Optional<FavoriteDTO> findByUser_idAndProduct_id(Integer userId, Integer productId) throws NotFoundException;
+    void deleteByUser_idAndProduct_id(Integer userId, Integer productId) throws NotFoundException;
 }
