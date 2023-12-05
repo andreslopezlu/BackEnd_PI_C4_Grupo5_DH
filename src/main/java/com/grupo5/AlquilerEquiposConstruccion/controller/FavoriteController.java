@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -60,30 +62,33 @@ public class FavoriteController {
     }
 
     @GetMapping("/by-product/{id}")
-    public ResponseEntity<FavoriteDTO> findByProduct_id(@PathVariable Integer id) throws NotFoundException {
-        Optional<FavoriteDTO> favoriteSearch = favoriteService.findByProduct_id(id);
-        if (favoriteSearch.isPresent()) {
-            return ResponseEntity.ok(favoriteSearch.get());
+    public ResponseEntity<List<FavoriteDTO>> findAllByProduct_id(@PathVariable Integer id) throws NotFoundException {
+        List<FavoriteDTO> favoriteSearch = favoriteService.findByProduct_id(id);
+        if (!favoriteSearch.isEmpty()) {
+            return ResponseEntity.ok(favoriteSearch);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @GetMapping("/by-user/{id}")
-    public ResponseEntity<FavoriteDTO> findByUser_id(@PathVariable Integer id) throws NotFoundException {
-        Optional<FavoriteDTO> favoriteSearch = favoriteService.findByUser_id(id);
-        if (favoriteSearch.isPresent()) {
-            return ResponseEntity.ok(favoriteSearch.get());
+    public ResponseEntity<List<FavoriteDTO>> findAllByUser_id(@PathVariable Integer id) throws NotFoundException {
+        List<FavoriteDTO> favoriteSearch = favoriteService.findByUser_id(id);
+        if (!favoriteSearch.isEmpty()) {
+            return ResponseEntity.ok(favoriteSearch);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @GetMapping("/by-user-and-product/{userId}/{productId}")
-    public ResponseEntity<FavoriteDTO> findByUser_idAndProduct_id(@PathVariable Integer userId, @PathVariable Integer productId) throws NotFoundException {
+    public ResponseEntity<Map<String, Object>> findByUser_idAndProduct_id(@PathVariable Integer userId, @PathVariable Integer productId) throws NotFoundException {
         Optional<FavoriteDTO> favoriteSearch = favoriteService.findByUser_idAndProduct_id(userId, productId);
         if (favoriteSearch.isPresent()) {
-            return ResponseEntity.ok(favoriteSearch.get());
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", "true");
+            responseBody.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(responseBody, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

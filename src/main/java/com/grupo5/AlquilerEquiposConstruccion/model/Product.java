@@ -47,10 +47,16 @@ public class Product {
     @JsonIgnore
     private Set<Favorite> favorites = new HashSet<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Review> reviews = new HashSet<>();
+
+    private Integer totalReviews;
+
     public Product() {
     }
 
-    public Product(Integer id, String name, String description, String specifications, boolean active, boolean available, Double costPerDay, Double average_score, City city, List<Image> image, Category category, String policiesCancellation) {
+    public Product(Integer id, String name, String description, String specifications, boolean active, boolean available, Double costPerDay, Double average_score, City city, List<Image> image, Category category, String policiesCancellation, Integer totalReviews) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -63,6 +69,7 @@ public class Product {
         this.image = image;
         this.category = category;
         this.policiesCancellation = policiesCancellation;
+        this.totalReviews = totalReviews;
     }
 
     public Integer getId() {
@@ -161,4 +168,11 @@ public class Product {
         this.policiesCancellation = policiesCancellation;
     }
 
+    public Integer getTotalReviews() {
+        return totalReviews;
+    }
+
+    public void setTotalReviews(Integer totalReviews) {
+        this.totalReviews = totalReviews;
+    }
 }
