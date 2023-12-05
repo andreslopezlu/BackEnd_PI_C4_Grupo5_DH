@@ -2,6 +2,7 @@ package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo5.AlquilerEquiposConstruccion.dto.FavoriteDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.ReservationDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Favorite;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
@@ -77,23 +79,24 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public Optional<FavoriteDTO> findByProduct_id(Integer id) throws NotFoundException {
-        Favorite favoriteFounded = favoritesRepository.findByProduct_id(id).orElseThrow(() -> new NotFoundException("The " +
-                "favorite for the product with the id: " + id + " was not found."));
-        return Optional.ofNullable(mapper.convertValue(favoriteFounded, FavoriteDTO.class));
+    public List<FavoriteDTO> findByProduct_id(Integer id) throws NotFoundException {
+        List<Favorite> favoriteFounded = favoritesRepository.findByProduct_id(id);
+        return favoriteFounded.stream()
+                .map(favorite -> mapper.convertValue(favorite, FavoriteDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<FavoriteDTO> findByUser_id(Integer id) throws NotFoundException {
-        Favorite favoriteFounded = favoritesRepository.findByUser_id(id).orElseThrow(() -> new NotFoundException("The " +
-                "favorite for the user with the id: " + id + " was not found."));
-        return Optional.ofNullable(mapper.convertValue(favoriteFounded, FavoriteDTO.class));
+    public List<FavoriteDTO> findByUser_id(Integer id) throws NotFoundException {
+        List<Favorite> favoriteFounded = favoritesRepository.findByUser_id(id);
+        return favoriteFounded.stream()
+                .map(favorite -> mapper.convertValue(favorite, FavoriteDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Optional<FavoriteDTO> findByUser_idAndProduct_id(Integer userId, Integer productId) throws NotFoundException {
-        Favorite favoriteFounded = favoritesRepository.findByUser_idAndProduct_id(userId, productId).orElseThrow(() -> new NotFoundException("The " +
-                "favorite for the user with the id: " + userId + " and the product with the id " + productId + " was not found."));
+        Favorite favoriteFounded = favoritesRepository.findByUser_idAndProduct_id(userId, productId).orElseThrow(() -> new NotFoundException("false"));
         return Optional.ofNullable(mapper.convertValue(favoriteFounded, FavoriteDTO.class));
     }
 
