@@ -1,7 +1,8 @@
 package com.grupo5.AlquilerEquiposConstruccion.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductDTO {
 
     private Integer id;
@@ -23,11 +24,13 @@ public class ProductDTO {
 
     private Integer totalReviews;
 
+    private Integer totalScore;
+
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Integer id, String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation, Integer totalReviews) {
+    public ProductDTO(Integer id, String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation, Integer totalReviews, Integer totalScore) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -40,6 +43,7 @@ public class ProductDTO {
         this.category = category;
         this.policiesCancellation = policiesCancellation;
         this.totalReviews = totalReviews;
+        this.totalScore = totalScore;
     }
 
     public ProductDTO(String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation, Integer totalReviews) {
@@ -54,6 +58,7 @@ public class ProductDTO {
         this.category = category;
         this.policiesCancellation = policiesCancellation;
         this.totalReviews = totalReviews;
+        this.totalScore = totalScore;
     }
 
     public Integer getId() {
@@ -152,6 +157,14 @@ public class ProductDTO {
         this.totalReviews = totalReviews;
     }
 
+    public Integer getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
+    }
+
     @Override
     public String toString() {
         return "ProductDTO{" +
@@ -167,6 +180,7 @@ public class ProductDTO {
                 ", category=" + category +
                 ", policiesCancellation='" + policiesCancellation + '\'' +
                 ", totalReviews=" + totalReviews +
+                ", totalScore=" + totalScore +
                 '}';
     }
 }

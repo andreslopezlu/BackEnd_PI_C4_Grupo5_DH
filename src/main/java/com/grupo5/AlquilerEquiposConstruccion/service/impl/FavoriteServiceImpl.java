@@ -2,11 +2,10 @@ package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo5.AlquilerEquiposConstruccion.dto.FavoriteDTO;
-import com.grupo5.AlquilerEquiposConstruccion.dto.ReservationDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Favorite;
-import com.grupo5.AlquilerEquiposConstruccion.repository.FavoritesRepository;
+import com.grupo5.AlquilerEquiposConstruccion.repository.FavoriteRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.FavoriteService;
 import jakarta.transaction.Transactional;
 import org.apache.log4j.Logger;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 public class FavoriteServiceImpl implements FavoriteService {
 
     @Autowired
-    FavoritesRepository favoritesRepository;
+    FavoriteRepository favoritesRepository;
 
     @Autowired
     private ObjectMapper mapper;

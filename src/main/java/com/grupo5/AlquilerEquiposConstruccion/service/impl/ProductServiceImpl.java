@@ -12,6 +12,8 @@ import com.grupo5.AlquilerEquiposConstruccion.model.City;
 import com.grupo5.AlquilerEquiposConstruccion.model.Product;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ProductRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
+import com.grupo5.AlquilerEquiposConstruccion.utils.ProductMapper;
+import jakarta.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private final Logger logger = Logger.getLogger(ProductServiceImpl.class);
@@ -39,6 +42,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ObjectMapper mapper;
+
+    @Autowired
+    ProductMapper mapperProduct;
+
 
     @Override
     public List<ProductDTO> getAllProducts() {
@@ -199,6 +206,17 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
 
         return productDTOList;
+    }
+
+    @Override
+    public void updateProductScores(Integer totalReviews, Integer totalScore, Double average_score, Integer id) throws NotFoundException {
+        ProductDTO existingProduct = getProductById(id).get();
+        existingProduct.setTotalReviews(totalReviews);
+        existingProduct.setTotalScore(totalScore);
+        existingProduct.setAverage_score(average_score);
+        Product product = productRepository.findById(id).get();
+        mapperProduct.updateProductFromDto(existingProduct, product);
+        productRepository.save(product);
     }
 
 }

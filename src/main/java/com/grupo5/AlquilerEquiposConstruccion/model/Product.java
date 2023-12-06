@@ -1,6 +1,7 @@
 package com.grupo5.AlquilerEquiposConstruccion.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name="product")
 public class Product {
     @Id
@@ -53,10 +55,12 @@ public class Product {
 
     private Integer totalReviews;
 
+    private Integer totalScore;
+
     public Product() {
     }
 
-    public Product(Integer id, String name, String description, String specifications, boolean active, boolean available, Double costPerDay, Double average_score, City city, List<Image> image, Category category, String policiesCancellation, Integer totalReviews) {
+    public Product(Integer id, String name, String description, String specifications, boolean active, boolean available, Double costPerDay, Double average_score, City city, List<Image> image, Category category, String policiesCancellation, Integer totalReviews, Integer totalScore) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -70,6 +74,7 @@ public class Product {
         this.category = category;
         this.policiesCancellation = policiesCancellation;
         this.totalReviews = totalReviews;
+        this.totalScore = totalScore;
     }
 
     public Integer getId() {
@@ -174,5 +179,13 @@ public class Product {
 
     public void setTotalReviews(Integer totalReviews) {
         this.totalReviews = totalReviews;
+    }
+
+    public Integer getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
     }
 }

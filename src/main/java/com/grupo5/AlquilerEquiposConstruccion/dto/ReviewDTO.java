@@ -17,14 +17,5 @@ public class ReviewDTO {
     private String review;
     private Product product;
     private User user;
-
     private Integer score;
-
-    public ReviewDTO(LocalDate publication_date, String review, Product product, User user, Integer score) {
-        this.publication_date = publication_date;
-        this.review = review;
-        this.product = product;
-        this.user = user;
-        this.score = score;
-    }
 }

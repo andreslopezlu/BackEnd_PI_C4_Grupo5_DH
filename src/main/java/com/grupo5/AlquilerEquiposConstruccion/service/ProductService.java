@@ -18,5 +18,5 @@ public interface ProductService {
     List<ProductDTO>getProductsByCity(String name) throws NotFoundException;
     List<ProductDTO> getRandomProduct();
     List<ProductDTO> getAllSuggestionsProducts(String input);
-
+    public void updateProductScores(Integer totalReviews, Integer totalScore, Double average_score, Integer id) throws NotFoundException;
 }

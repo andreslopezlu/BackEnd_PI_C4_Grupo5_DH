@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.GET,"/favorites/by-user/*")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.GET,"/favorites/by-user-and-product/**")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.DELETE,"/favorites/by-user-and-product/**")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/reviews/create")).hasAnyRole("ADMIN", "USER")
 //                        .requestMatchers(antMatcher(HttpMethod.GET, "/**")).hasAnyRole("ADMIN", "USER")
 //                        .requestMatchers(antMatcher(HttpMethod.POST, "/**")).hasRole("ADMIN")
 //                        .requestMatchers(antMatcher(HttpMethod.PUT, "/**")).hasRole("ADMIN")

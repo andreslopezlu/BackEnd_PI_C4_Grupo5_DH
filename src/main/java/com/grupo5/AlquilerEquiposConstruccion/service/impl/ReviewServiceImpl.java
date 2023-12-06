@@ -1,15 +1,13 @@
 package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo5.AlquilerEquiposConstruccion.dto.FavoriteDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ReviewDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Favorite;
+import com.grupo5.AlquilerEquiposConstruccion.model.Product;
 import com.grupo5.AlquilerEquiposConstruccion.model.Review;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ReviewRepository;
-import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
 import com.grupo5.AlquilerEquiposConstruccion.service.ReviewService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -60,12 +59,21 @@ public class ReviewServiceImpl implements ReviewService {
             LocalDate publicationDate = LocalDate.now();
             review.setPublication_date(publicationDate);
 
+            Integer score = review.getScore();
+
             Integer productId = review.getProduct().getId();
             ProductDTO existingProduct = productService.getProductById(productId).get();
+
             Integer totalReviews = existingProduct.getTotalReviews();
             existingProduct.setTotalReviews(totalReviews+1);
-            Double average_score = existingProduct.getAverage_score();
 
+            Integer totalScore = existingProduct.getTotalScore();
+            existingProduct.setTotalScore(totalScore+score);
+
+            Double average_score = (totalScore*1.0)/(totalReviews*1.0);
+            existingProduct.setAverage_score(average_score);
+
+            productService.updateProductScores(totalReviews, totalScore, average_score, productId);
 
             Review reviewCreated = mapper.convertValue(review, Review.class);
             logger.info("The review was created successfully.");
@@ -81,16 +89,18 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Optional<ReviewDTO> findByProduct_id(Integer id) throws NotFoundException {
-        Review reviewFounded = reviewRepository.findByProduct_id(id).orElseThrow(() -> new NotFoundException("The " +
-                "review for the product with the id: " + id + " was not found."));
-        return Optional.ofNullable(mapper.convertValue(reviewFounded, ReviewDTO.class));
+    public List<ReviewDTO> findByProduct_id(Integer id) throws NotFoundException {
+        List<Review> reviewFounded = reviewRepository.findByProduct_id(id);
+        return reviewFounded.stream()
+                .map(review -> mapper.convertValue(review, ReviewDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<ReviewDTO> findByUser_id(Integer id) throws NotFoundException {
-        Review reviewFounded = reviewRepository.findByUser_id(id).orElseThrow(() -> new NotFoundException("The " +
-                "review for the user with the id: " + id + " was not found."));
-        return Optional.ofNullable(mapper.convertValue(reviewFounded, ReviewDTO.class));
+    public List<ReviewDTO> findByUser_id(Integer id) throws NotFoundException {
+        List<Review> reviewFounded = reviewRepository.findByUser_id(id);
+        return reviewFounded.stream()
+                .map(review -> mapper.convertValue(review, ReviewDTO.class))
+                .collect(Collectors.toList());
     }
 }
