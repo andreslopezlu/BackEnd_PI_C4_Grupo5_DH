@@ -1,7 +1,6 @@
 package com.grupo5.AlquilerEquiposConstruccion.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -9,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name="product")
 public class Product {
     @Id
@@ -49,18 +47,18 @@ public class Product {
     @JsonIgnore
     private Set<Favorite> favorites = new HashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Review> reviews = new HashSet<>();
 
-    private Integer totalReviews;
+    private Integer total_reviews;
 
-    private Integer totalScore;
+    private Integer total_score;
 
     public Product() {
     }
 
-    public Product(Integer id, String name, String description, String specifications, boolean active, boolean available, Double costPerDay, Double average_score, City city, List<Image> image, Category category, String policiesCancellation, Integer totalReviews, Integer totalScore) {
+    public Product(Integer id, String name, String description, String specifications, boolean active, boolean available, Double costPerDay, Double average_score, City city, List<Image> image, Category category, String policiesCancellation, Integer total_reviews, Integer total_score) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -73,8 +71,8 @@ public class Product {
         this.image = image;
         this.category = category;
         this.policiesCancellation = policiesCancellation;
-        this.totalReviews = totalReviews;
-        this.totalScore = totalScore;
+        this.total_reviews = total_reviews;
+        this.total_score = total_score;
     }
 
     public Integer getId() {
@@ -174,18 +172,18 @@ public class Product {
     }
 
     public Integer getTotalReviews() {
-        return totalReviews;
+        return total_reviews;
     }
 
-    public void setTotalReviews(Integer totalReviews) {
-        this.totalReviews = totalReviews;
+    public void setTotalReviews(Integer total_reviews) {
+        this.total_reviews = total_reviews;
     }
 
     public Integer getTotalScore() {
-        return totalScore;
+        return total_score;
     }
 
-    public void setTotalScore(Integer totalScore) {
-        this.totalScore = totalScore;
+    public void setTotalScore(Integer total_score) {
+        this.total_score = total_score;
     }
 }

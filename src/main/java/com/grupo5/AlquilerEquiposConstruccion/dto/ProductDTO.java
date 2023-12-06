@@ -2,7 +2,8 @@ package com.grupo5.AlquilerEquiposConstruccion.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
-@JsonIgnoreProperties(ignoreUnknown = true)
+import org.hibernate.annotations.DynamicUpdate;
+
 public class ProductDTO {
 
     private Integer id;
@@ -22,15 +23,15 @@ public class ProductDTO {
 
     private String policiesCancellation;
 
-    private Integer totalReviews;
+    private Integer total_reviews;
 
-    private Integer totalScore;
+    private Integer total_score;
 
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Integer id, String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation, Integer totalReviews, Integer totalScore) {
+    public ProductDTO(Integer id, String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation, Integer total_reviews, Integer total_score) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -42,11 +43,11 @@ public class ProductDTO {
         this.city = city;
         this.category = category;
         this.policiesCancellation = policiesCancellation;
-        this.totalReviews = totalReviews;
-        this.totalScore = totalScore;
+        this.total_reviews = total_reviews;
+        this.total_score = total_score;
     }
 
-    public ProductDTO(String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation, Integer totalReviews) {
+    public ProductDTO(String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation, Integer total_reviews, Integer total_score) {
         this.name = name;
         this.description = description;
         this.specifications = specifications;
@@ -57,8 +58,8 @@ public class ProductDTO {
         this.city = city;
         this.category = category;
         this.policiesCancellation = policiesCancellation;
-        this.totalReviews = totalReviews;
-        this.totalScore = totalScore;
+        this.total_reviews = total_reviews;
+        this.total_score = total_score;
     }
 
     public Integer getId() {
@@ -150,19 +151,19 @@ public class ProductDTO {
     }
 
     public Integer getTotalReviews() {
-        return totalReviews;
+        return total_reviews;
     }
 
-    public void setTotalReviews(Integer totalReviews) {
-        this.totalReviews = totalReviews;
+    public void setTotalReviews(Integer total_reviews) {
+        this.total_reviews = total_reviews;
     }
 
     public Integer getTotalScore() {
-        return totalScore;
+        return total_score;
     }
 
-    public void setTotalScore(Integer totalScore) {
-        this.totalScore = totalScore;
+    public void setTotalScore(Integer total_score) {
+        this.total_score = total_score;
     }
 
     @Override
@@ -179,8 +180,8 @@ public class ProductDTO {
                 ", city=" + city +
                 ", category=" + category +
                 ", policiesCancellation='" + policiesCancellation + '\'' +
-                ", totalReviews=" + totalReviews +
-                ", totalScore=" + totalScore +
+                ", totalReviews=" + total_reviews +
+                ", totalScore=" + total_score +
                 '}';
     }
 }

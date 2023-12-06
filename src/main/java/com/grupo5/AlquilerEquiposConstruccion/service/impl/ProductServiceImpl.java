@@ -1,10 +1,7 @@
 package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo5.AlquilerEquiposConstruccion.dto.CategoryDTO;
-import com.grupo5.AlquilerEquiposConstruccion.dto.CityDTO;
-import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
-import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTORequest;
+import com.grupo5.AlquilerEquiposConstruccion.dto.*;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Category;
@@ -112,7 +109,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(ProductDTORequest product, Integer id) throws NotFoundException {
+    public ProductDTO updateProduct(ProductDTO product, Integer id) throws NotFoundException {
         Optional<ProductDTO> existingProduct = getProductById(id);
         if (existingProduct.isPresent()){
             existingProduct.get().setName(product.getName());
@@ -122,15 +119,18 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.get().setAvailable(product.isAvailable());
             existingProduct.get().setAverage_score(product.getAverage_score());
             existingProduct.get().setCostPerDay(product.getCostPerDay());
+            existingProduct.get().setTotalReviews(product.getTotalReviews());
+            existingProduct.get().setTotalScore(product.getTotalScore());
+            existingProduct.get().setAverage_score((double) ((product.getTotalScore()) / (product.getTotalReviews())));
             Product productUpdated = mapper.convertValue(existingProduct, Product.class);
-            Optional<CategoryDTO> category = categoryService.getCategoryById(product.getCategory_id());
+            Optional<CategoryDTO> category = categoryService.getCategoryById(product.getCategory().getId());
             if (category.isPresent()) {
                 Category categoryEntity = mapper.convertValue(category.get(), Category.class);
                 productUpdated.setCategory(categoryEntity);
             } else {
                 throw new NotFoundException("Category not found.");
             }
-            Optional<CityDTO> city = cityService.getCityById(product.getCity_id());
+            Optional<CityDTO> city = cityService.getCityById(product.getCity().getId());
             if (city.isPresent()) {
                 City cityEntity = mapper.convertValue(city.get(), City.class);
                 productUpdated.setCity(cityEntity);
@@ -206,17 +206,6 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
 
         return productDTOList;
-    }
-
-    @Override
-    public void updateProductScores(Integer totalReviews, Integer totalScore, Double average_score, Integer id) throws NotFoundException {
-        ProductDTO existingProduct = getProductById(id).get();
-        existingProduct.setTotalReviews(totalReviews);
-        existingProduct.setTotalScore(totalScore);
-        existingProduct.setAverage_score(average_score);
-        Product product = productRepository.findById(id).get();
-        mapperProduct.updateProductFromDto(existingProduct, product);
-        productRepository.save(product);
     }
 
 }

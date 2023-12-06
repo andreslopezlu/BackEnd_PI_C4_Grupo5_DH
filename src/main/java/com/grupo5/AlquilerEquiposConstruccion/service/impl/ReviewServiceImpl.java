@@ -2,17 +2,16 @@ package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTORequest;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ReviewDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
-import com.grupo5.AlquilerEquiposConstruccion.model.Product;
 import com.grupo5.AlquilerEquiposConstruccion.model.Review;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ReviewRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.ReviewService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     ProductServiceImpl productService;
+
+    @Autowired
+    CategoryServiceImpl categoryService;
 
     @Override
     public List<ReviewDTO> getAllReviews() {
@@ -70,10 +72,24 @@ public class ReviewServiceImpl implements ReviewService {
             Integer totalScore = existingProduct.getTotalScore();
             existingProduct.setTotalScore(totalScore+score);
 
-            Double average_score = (totalScore*1.0)/(totalReviews*1.0);
-            existingProduct.setAverage_score(average_score);
+            existingProduct.setId(existingProduct.getId());
+            existingProduct.setName(existingProduct.getName());
+            existingProduct.setDescription(existingProduct.getDescription());
+            existingProduct.setSpecifications(existingProduct.getSpecifications());
+            existingProduct.setActive(true);
+            existingProduct.setAvailable(true);
+            existingProduct.setCostPerDay(existingProduct.getCostPerDay());
+            existingProduct.setCategory(existingProduct.getCategory());
+            existingProduct.setCity(existingProduct.getCity());
 
-            productService.updateProductScores(totalReviews, totalScore, average_score, productId);
+            ProductDTO productUpdated = mapper.convertValue(existingProduct, ProductDTO.class);
+
+//            productService.updateProduct(productUpdated, productId);
+//
+//            Double average_score = (double) ((totalScore) / (totalReviews));
+//            existingProduct.setAverage_score(average_score);
+
+            productService.updateProduct(productUpdated, productId);
 
             Review reviewCreated = mapper.convertValue(review, Review.class);
             logger.info("The review was created successfully.");
