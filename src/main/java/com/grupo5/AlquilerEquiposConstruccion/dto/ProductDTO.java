@@ -19,13 +19,15 @@ public class ProductDTO {
 
     private CategoryDTO category;
 
-    String policiesCancellation;
+    private String policiesCancellation;
+
+    private Integer totalReviews;
 
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Integer id, String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation) {
+    public ProductDTO(Integer id, String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation, Integer totalReviews) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -37,9 +39,10 @@ public class ProductDTO {
         this.city = city;
         this.category = category;
         this.policiesCancellation = policiesCancellation;
+        this.totalReviews = totalReviews;
     }
 
-    public ProductDTO(String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation) {
+    public ProductDTO(String name, String description, String specifications, boolean active, boolean available, Double average_score, Double costPerDay, CityDTO city, CategoryDTO category, String policiesCancellation, Integer totalReviews) {
         this.name = name;
         this.description = description;
         this.specifications = specifications;
@@ -50,6 +53,7 @@ public class ProductDTO {
         this.city = city;
         this.category = category;
         this.policiesCancellation = policiesCancellation;
+        this.totalReviews = totalReviews;
     }
 
     public Integer getId() {
@@ -140,6 +144,14 @@ public class ProductDTO {
         this.policiesCancellation = policiesCancellation;
     }
 
+    public Integer getTotalReviews() {
+        return totalReviews;
+    }
+
+    public void setTotalReviews(Integer totalReviews) {
+        this.totalReviews = totalReviews;
+    }
+
     @Override
     public String toString() {
         return "ProductDTO{" +
@@ -154,7 +166,7 @@ public class ProductDTO {
                 ", city=" + city +
                 ", category=" + category +
                 ", policiesCancellation='" + policiesCancellation + '\'' +
+                ", totalReviews=" + totalReviews +
                 '}';
     }
-
 }

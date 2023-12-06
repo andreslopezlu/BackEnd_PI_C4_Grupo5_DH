@@ -16,10 +16,17 @@ public class LoginDTOResponse {
     @JsonProperty("lastname")
     private String lastName;
 
-    public LoginDTOResponse(String jwt, String role, String name, String lastName) {
+    @JsonProperty("email")
+    private String email;
+    @JsonProperty("id")
+    private Integer id;
+
+    public LoginDTOResponse(String jwt, String role, String name, String lastName, String email, Integer id) {
         this.jwt = jwt;
         this.role = role;
         this.name = name;
         this.lastName = lastName;
+        this.email = email;
+        this.id = id;
     }
 }

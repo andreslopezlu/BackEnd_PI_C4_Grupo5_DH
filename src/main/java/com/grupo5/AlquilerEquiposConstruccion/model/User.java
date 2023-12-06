@@ -38,6 +38,10 @@ public class User {
     @JsonIgnore
     private Set<Favorite> favorites = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Review> reviews = new HashSet<>();
+
     public User() {
     }
 

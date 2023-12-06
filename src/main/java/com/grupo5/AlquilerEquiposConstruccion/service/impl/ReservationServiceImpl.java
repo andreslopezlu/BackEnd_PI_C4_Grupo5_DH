@@ -1,13 +1,21 @@
 package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ReservationDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.UserDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
+import com.grupo5.AlquilerEquiposConstruccion.model.Product;
 import com.grupo5.AlquilerEquiposConstruccion.model.Reservation;
+import com.grupo5.AlquilerEquiposConstruccion.model.User;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ReservationRepository;
+import com.grupo5.AlquilerEquiposConstruccion.service.EmailService;
+import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
 import com.grupo5.AlquilerEquiposConstruccion.service.ReservationService;
+import com.grupo5.AlquilerEquiposConstruccion.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +32,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     private ObjectMapper mapper;
+
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    ProductService productService;
 
     @Override
     public List<ReservationDTO> findByUserId(Integer userId) {
@@ -57,10 +74,30 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationDTO saveReservation(ReservationDTO reservationDTO) {
+    public ReservationDTO saveReservation(ReservationDTO reservationDTO) throws NotFoundException {
         Reservation reservation = mapper.convertValue(reservationDTO, Reservation.class);
+        Optional<UserDTO> user = userService.getUserById(reservation.getUser().getId());
+        Optional<ProductDTO> product = productService.getProductById(reservation.getProduct().getId());
+
+        String email = user.get().getEmail();
+        String productName = product.get().getName();
+        String checkin = reservation.getCheck_in_date().toString();
+        String checkout = reservation.getCheckout_date().toString();
+
         Reservation savedReservation = reservationRepository.save(reservation);
-        logger.info("The category was created successfully.");
+        logger.info("The reservation was created successfully.");
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Reservación completa en AlquiConstruye!");
+        mailMessage.setText("Se realizó un proceso de reserva para el usuario con email: "
+                + email + ".\n\n"
+                + "Detalles de la reserva:\n"
+                + "Producto: " + productName + ".\n"
+                + "Fecha de retiro: " + checkin + ".\n"
+                + "Fecha de devolución: " + checkout + ".");
+        emailService.sendEmail(mailMessage);
+
         return mapper.convertValue(savedReservation, ReservationDTO.class);
     }
 
