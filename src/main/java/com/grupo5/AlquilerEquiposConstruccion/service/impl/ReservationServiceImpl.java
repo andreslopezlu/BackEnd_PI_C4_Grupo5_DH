@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,6 +44,14 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationDTO> findByUserId(Integer userId) {
         List<Reservation> reservations = reservationRepository.findByUserId(userId);
+        for(Reservation reservation: reservations){
+            LocalDate todayDate = LocalDate.now();
+            LocalDate checkout = reservation.getCheckout_date();
+            if(todayDate.isAfter(checkout)){
+                reservation.setActive(false);
+                reservationRepository.save(reservation);
+            }
+        }
         return reservations.stream()
                 .map(reservation -> mapper.convertValue(reservation, ReservationDTO.class))
                 .collect(Collectors.toList());
@@ -74,6 +83,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationDTO saveReservation(ReservationDTO reservationDTO) throws NotFoundException {
         Reservation reservation = mapper.convertValue(reservationDTO, Reservation.class);
+        LocalDate checkinDate = reservation.getCheck_in_date();
+        LocalDate todayDate = LocalDate.now();
+        if(checkinDate.isAfter(todayDate)) {
+            reservation.setActive(true);
+        }
         Optional<UserDTO> user = userService.getUserById(reservation.getUser().getId());
         Optional<ProductDTO> product = productService.getProductById(reservation.getProduct().getId());
 

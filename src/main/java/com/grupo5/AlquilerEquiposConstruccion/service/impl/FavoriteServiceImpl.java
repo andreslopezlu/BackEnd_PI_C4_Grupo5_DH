@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class FavoriteServiceImpl implements FavoriteService {
 
     @Autowired
-    FavoriteRepository favoritesRepository;
+    FavoriteRepository favoriteRepository;
 
     @Autowired
     private ObjectMapper mapper;
@@ -30,7 +30,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public List<FavoriteDTO> getAllFavorites() {
-        List<Favorite> favorites = favoritesRepository.findAll();
+        List<Favorite> favorites = favoriteRepository.findAll();
         List<FavoriteDTO> favoritesDTO = new ArrayList<>();
         for(Favorite fav : favorites){
             favoritesDTO.add(mapper.convertValue(fav, FavoriteDTO.class));
@@ -40,7 +40,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public Optional<FavoriteDTO> getFavoriteById(Integer id) throws NotFoundException {
-        Favorite favoriteFounded = favoritesRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
+        Favorite favoriteFounded = favoriteRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
                 "favorite with the id: " + id + " was not found."));
         return Optional.ofNullable(mapper.convertValue(favoriteFounded, FavoriteDTO.class));
     }
@@ -52,7 +52,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         } else{
             Favorite favoriteCreated = mapper.convertValue(favorite, Favorite.class);
             logger.info("The favorite was created successfully.");
-            return mapper.convertValue(favoritesRepository.save(favoriteCreated), FavoriteDTO.class);
+            return mapper.convertValue(favoriteRepository.save(favoriteCreated), FavoriteDTO.class);
         }
     }
 
@@ -64,7 +64,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             existingFavorite.get().setProduct(favorite.getProduct());
             existingFavorite.get().setUser(favorite.getUser());
             Favorite favoriteUpdated = mapper.convertValue(existingFavorite, Favorite.class);
-            favoritesRepository.save(favoriteUpdated);
+            favoriteRepository.save(favoriteUpdated);
             logger.info("The favorite was updated successfully.");
         }
         return mapper.convertValue(existingFavorite, FavoriteDTO.class);
@@ -72,14 +72,14 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public void deleteFavoriteById(Integer id) throws NotFoundException {
-        favoritesRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
+        favoriteRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
                 "favorite with the id: " + id + " was not found."));
-        favoritesRepository.deleteById(id);
+        favoriteRepository.deleteById(id);
     }
 
     @Override
     public List<FavoriteDTO> findByProduct_id(Integer id) throws NotFoundException {
-        List<Favorite> favoriteFounded = favoritesRepository.findByProduct_id(id);
+        List<Favorite> favoriteFounded = favoriteRepository.findByProduct_id(id);
         return favoriteFounded.stream()
                 .map(favorite -> mapper.convertValue(favorite, FavoriteDTO.class))
                 .collect(Collectors.toList());
@@ -87,7 +87,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public List<FavoriteDTO> findByUser_id(Integer id) throws NotFoundException {
-        List<Favorite> favoriteFounded = favoritesRepository.findByUser_id(id);
+        List<Favorite> favoriteFounded = favoriteRepository.findByUser_id(id);
         return favoriteFounded.stream()
                 .map(favorite -> mapper.convertValue(favorite, FavoriteDTO.class))
                 .collect(Collectors.toList());
@@ -95,15 +95,15 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public Optional<FavoriteDTO> findByUser_idAndProduct_id(Integer userId, Integer productId) throws NotFoundException {
-        Favorite favoriteFounded = favoritesRepository.findByUser_idAndProduct_id(userId, productId).orElseThrow(() -> new NotFoundException("false"));
+        Favorite favoriteFounded = favoriteRepository.findByUser_idAndProduct_id(userId, productId).orElseThrow(() -> new NotFoundException("false"));
         return Optional.ofNullable(mapper.convertValue(favoriteFounded, FavoriteDTO.class));
     }
 
     @Override
     @Transactional
     public void deleteByUser_idAndProduct_id(Integer userId, Integer productId) throws NotFoundException {
-        favoritesRepository.findByUser_idAndProduct_id(userId, productId).orElseThrow(() -> new NotFoundException("The " +
-                "favorite for the user with the id: " + userId + " and the product with the id " + productId + " was not found."));
-        favoritesRepository.deleteByUser_idAndProduct_id(userId, productId);
+        favoriteRepository.findByUser_idAndProduct_id(userId, productId).orElseThrow(() -> new NotFoundException("The " +
+                "favorite for the user with the id " + userId + " and the product with the id " + productId + " was not found."));
+        favoriteRepository.deleteByUser_idAndProduct_id(userId, productId);
     }
 }

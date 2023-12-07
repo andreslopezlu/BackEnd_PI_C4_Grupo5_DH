@@ -1,8 +1,6 @@
 package com.grupo5.AlquilerEquiposConstruccion.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
-import org.hibernate.annotations.DynamicUpdate;
 
 public class ProductDTO {
 

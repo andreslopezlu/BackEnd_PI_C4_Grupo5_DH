@@ -1,7 +1,10 @@
 package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo5.AlquilerEquiposConstruccion.dto.*;
+import com.grupo5.AlquilerEquiposConstruccion.dto.CategoryDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.CityDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
+import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTORequest;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
 import com.grupo5.AlquilerEquiposConstruccion.model.Category;

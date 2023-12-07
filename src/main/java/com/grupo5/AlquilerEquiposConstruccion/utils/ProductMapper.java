@@ -2,13 +2,11 @@ package com.grupo5.AlquilerEquiposConstruccion.utils;
 
 import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
 import com.grupo5.AlquilerEquiposConstruccion.model.Product;
-
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
 @Configuration
