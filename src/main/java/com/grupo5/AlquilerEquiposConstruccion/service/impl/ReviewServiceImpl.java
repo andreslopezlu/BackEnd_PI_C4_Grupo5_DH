@@ -1,6 +1,7 @@
 package com.grupo5.AlquilerEquiposConstruccion.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo5.AlquilerEquiposConstruccion.dto.FavoriteDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ReviewDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
@@ -98,8 +99,13 @@ public class ReviewServiceImpl implements ReviewService {
         return mapper.convertValue(reviewRepository.save(reviewCreated), ReviewDTO.class);
     }
 
+//    @Override
+//    ReviewDTO updateFavorite(FavoriteDTO favorite) throws NotFoundException{
+//        return ReviewDTO;
+//    };
+
     @Override
-    public void deleteById(Integer id) throws NotFoundException {
+    public void deleteReviewById(Integer id) throws NotFoundException {
         reviewRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
                 "review with the id: " + id + " was not found."));
         reviewRepository.deleteById(id);
