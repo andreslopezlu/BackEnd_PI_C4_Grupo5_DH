@@ -43,9 +43,9 @@ public class ReviewController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Integer id) throws NotFoundException {
+    public ResponseEntity<String> deleteReviewById(@PathVariable Integer id) throws NotFoundException {
         if (reviewService.getReviewById(id).isPresent()) {
-            reviewService.deleteById(id);
+            reviewService.deleteReviewById(id);
             return ResponseEntity.ok("The review with id: " + id + " was deleted successfully.");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review with id: " + id + " was not found.");

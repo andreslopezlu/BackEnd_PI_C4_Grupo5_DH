@@ -47,7 +47,7 @@ public class Product {
     @JsonIgnore
     private Set<Favorite> favorites = new HashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Review> reviews = new HashSet<>();
 
