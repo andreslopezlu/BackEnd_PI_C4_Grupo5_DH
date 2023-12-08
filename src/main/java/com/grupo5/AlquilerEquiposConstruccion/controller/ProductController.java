@@ -41,7 +41,7 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateProduct(@RequestBody ProductDTORequest product) throws Exception{
+    public ResponseEntity<?> updateProduct(@RequestBody ProductDTO product) throws Exception{
         Optional<ProductDTO> productSearch = productService.getProductById(product.getId());
         if(productSearch.isPresent()){
             return ResponseEntity.ok(productService.updateProduct(product, product.getId()));

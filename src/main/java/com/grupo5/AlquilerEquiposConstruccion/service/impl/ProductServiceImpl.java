@@ -12,6 +12,8 @@ import com.grupo5.AlquilerEquiposConstruccion.model.City;
 import com.grupo5.AlquilerEquiposConstruccion.model.Product;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ProductRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.ProductService;
+import com.grupo5.AlquilerEquiposConstruccion.utils.ProductMapper;
+import jakarta.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private final Logger logger = Logger.getLogger(ProductServiceImpl.class);
@@ -39,6 +42,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ObjectMapper mapper;
+
+    @Autowired
+    ProductMapper mapperProduct;
+
 
     @Override
     public List<ProductDTO> getAllProducts() {
@@ -105,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(ProductDTORequest product, Integer id) throws NotFoundException {
+    public ProductDTO updateProduct(ProductDTO product, Integer id) throws NotFoundException {
         Optional<ProductDTO> existingProduct = getProductById(id);
         if (existingProduct.isPresent()){
             existingProduct.get().setName(product.getName());
@@ -115,15 +122,18 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.get().setAvailable(product.isAvailable());
             existingProduct.get().setAverage_score(product.getAverage_score());
             existingProduct.get().setCostPerDay(product.getCostPerDay());
+            existingProduct.get().setTotalReviews(product.getTotalReviews());
+            existingProduct.get().setTotalScore(product.getTotalScore());
+            existingProduct.get().setAverage_score((double) ((product.getTotalScore()) / (product.getTotalReviews())));
             Product productUpdated = mapper.convertValue(existingProduct, Product.class);
-            Optional<CategoryDTO> category = categoryService.getCategoryById(product.getCategory_id());
+            Optional<CategoryDTO> category = categoryService.getCategoryById(product.getCategory().getId());
             if (category.isPresent()) {
                 Category categoryEntity = mapper.convertValue(category.get(), Category.class);
                 productUpdated.setCategory(categoryEntity);
             } else {
                 throw new NotFoundException("Category not found.");
             }
-            Optional<CityDTO> city = cityService.getCityById(product.getCity_id());
+            Optional<CityDTO> city = cityService.getCityById(product.getCity().getId());
             if (city.isPresent()) {
                 City cityEntity = mapper.convertValue(city.get(), City.class);
                 productUpdated.setCity(cityEntity);

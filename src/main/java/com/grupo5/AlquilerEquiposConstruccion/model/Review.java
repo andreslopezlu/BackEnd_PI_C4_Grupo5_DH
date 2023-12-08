@@ -31,6 +31,9 @@ public class Review {
 
     private Integer score;
 
+    public Review() {
+    }
+
     public Review(Integer id, LocalDate publication_date, String review, Product product, User user, Integer score) {
         this.id = id;
         this.publication_date = publication_date;

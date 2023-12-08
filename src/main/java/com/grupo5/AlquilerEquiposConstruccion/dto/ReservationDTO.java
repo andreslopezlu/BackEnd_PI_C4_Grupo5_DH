@@ -23,6 +23,8 @@ public class ReservationDTO {
 
     private User user;
 
+    private boolean active;
+
     public ReservationDTO() {
     }
 
@@ -35,12 +37,13 @@ public class ReservationDTO {
         this.user = user;
     }
 
-    public ReservationDTO(LocalDate check_in_date, LocalDate checkout_date, String comments, Product product, User user) {
+    public ReservationDTO(LocalDate check_in_date, LocalDate checkout_date, String comments, Product product, User user, boolean active) {
         this.check_in_date = check_in_date;
         this.checkout_date = checkout_date;
         this.comments = comments;
         this.product = product;
         this.user = user;
+        this.active = active;
     }
 
     public Integer getId() {
@@ -91,6 +94,14 @@ public class ReservationDTO {
         this.user = user;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "ReservationDTO{" +
@@ -100,6 +111,7 @@ public class ReservationDTO {
                 ", comments='" + comments + '\'' +
                 ", product=" + product +
                 ", user=" + user +
+                ", active=" + active +
                 '}';
     }
 }
