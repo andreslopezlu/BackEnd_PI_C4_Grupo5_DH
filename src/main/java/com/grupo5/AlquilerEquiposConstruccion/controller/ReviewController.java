@@ -42,6 +42,17 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.createReview(review));
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<?> updateReview(@RequestBody ReviewDTO review) throws Exception {
+        Optional<ReviewDTO> reviewSearch = reviewService.getReviewById(review.getId());
+        if (reviewSearch.isPresent()) {
+            return ResponseEntity.ok(reviewService.updateReview(review));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review with ID: " + review.getId() + " was not found.");
+        }
+
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteReviewById(@PathVariable Integer id) throws NotFoundException {
         if (reviewService.getReviewById(id).isPresent()) {
