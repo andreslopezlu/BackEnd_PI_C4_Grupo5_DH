@@ -6,6 +6,7 @@ import com.grupo5.AlquilerEquiposConstruccion.dto.ProductDTO;
 import com.grupo5.AlquilerEquiposConstruccion.dto.ReviewDTO;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.BadRequestException;
 import com.grupo5.AlquilerEquiposConstruccion.exceptions.NotFoundException;
+import com.grupo5.AlquilerEquiposConstruccion.model.Favorite;
 import com.grupo5.AlquilerEquiposConstruccion.model.Review;
 import com.grupo5.AlquilerEquiposConstruccion.repository.ReviewRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.ReviewService;
@@ -73,16 +74,6 @@ public class ReviewServiceImpl implements ReviewService {
 
             ProductDTO existingProduct = productService.getProductById(productId).get();
 
-            existingProduct.setId(existingProduct.getId());
-            existingProduct.setName(existingProduct.getName());
-            existingProduct.setDescription(existingProduct.getDescription());
-            existingProduct.setSpecifications(existingProduct.getSpecifications());
-            existingProduct.setActive(existingProduct.isActive());
-            existingProduct.setAvailable(existingProduct.isAvailable());
-            existingProduct.setCostPerDay(existingProduct.getCostPerDay());
-            existingProduct.setCategory(existingProduct.getCategory());
-            existingProduct.setCity(existingProduct.getCity());
-
             Integer totalReviews = existingProduct.getTotalReviews();
             existingProduct.setTotalReviews(totalReviews+1);
 
@@ -99,13 +90,84 @@ public class ReviewServiceImpl implements ReviewService {
         return mapper.convertValue(reviewRepository.save(reviewCreated), ReviewDTO.class);
     }
 
-//    @Override
-//    ReviewDTO updateFavorite(FavoriteDTO favorite) throws NotFoundException{
-//        return ReviewDTO;
-//    };
+    @Override
+    public ReviewDTO updateReview(ReviewDTO review) throws NotFoundException{
+
+        Integer id = review.getId();
+        Optional<ReviewDTO> existingReview = getReviewById(id);
+        Integer productId = existingReview.get().getProduct().getId();
+
+        if (existingReview.isPresent()){
+
+            if(review.getScore()==existingReview.get().getScore()){
+
+                existingReview.get().setProduct(review.getProduct());
+                existingReview.get().setUser(review.getUser());
+                existingReview.get().setReview(review.getReview());
+                existingReview.get().setScore(review.getScore());
+
+                Review reviewUpdated = mapper.convertValue(existingReview, Review.class);
+                reviewRepository.save(reviewUpdated);
+
+            }
+
+
+            if (review.getScore()!=existingReview.get().getScore()){
+
+                Integer existingScore = existingReview.get().getScore();
+                ProductDTO existingProduct = productService.getProductById(productId).get();
+
+                Integer existingTotalScore = existingProduct.getTotalScore();
+                existingProduct.setTotalScore(existingTotalScore-existingScore);
+
+                ProductDTO productUpdated = mapper.convertValue(existingProduct, ProductDTO.class);
+                productService.updateProduct(productUpdated, productId);
+
+
+                existingReview.get().setProduct(review.getProduct());
+                existingReview.get().setUser(review.getUser());
+                existingReview.get().setReview(review.getReview());
+                existingReview.get().setScore(review.getScore());
+
+                Review reviewUpdated = mapper.convertValue(existingReview, Review.class);
+                reviewRepository.save(reviewUpdated);
+
+
+                Integer newScore = review.getScore();
+                ProductDTO newProduct = productService.getProductById(productId).get();
+
+                Integer newTotalScore = newProduct.getTotalScore();
+                newProduct.setTotalScore(newTotalScore+newScore);
+
+                ProductDTO productUpdated2 = mapper.convertValue(newProduct, ProductDTO.class);
+                productService.updateProduct(productUpdated2, productId);
+
+            }
+
+        }
+
+        return mapper.convertValue(existingReview, ReviewDTO.class);
+
+    };
 
     @Override
     public void deleteReviewById(Integer id) throws NotFoundException {
+
+        Optional<ReviewDTO> existingReview = getReviewById(id);
+        Integer productId = existingReview.get().getProduct().getId();
+
+        ProductDTO existingProduct = productService.getProductById(productId).get();
+        Integer score = existingReview.get().getScore();
+
+        Integer totalReviews = existingProduct.getTotalReviews();
+        existingProduct.setTotalReviews(totalReviews-1);
+
+        Integer totalScore = existingProduct.getTotalScore();
+        existingProduct.setTotalScore(totalScore-score);
+
+        ProductDTO productUpdated = mapper.convertValue(existingProduct, ProductDTO.class);
+        productService.updateProduct(productUpdated, productId);
+
         reviewRepository.findById(id).orElseThrow(() -> new NotFoundException("The " +
                 "review with the id: " + id + " was not found."));
         reviewRepository.deleteById(id);
