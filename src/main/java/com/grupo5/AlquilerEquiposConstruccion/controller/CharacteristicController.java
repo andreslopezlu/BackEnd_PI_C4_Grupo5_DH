@@ -111,7 +111,7 @@ public class CharacteristicController {
         return ResponseEntity.ok(characteristicService.saveCharacteristic(characteristic));
     }
 
-    @PutMapping("/update")
+    /*@PutMapping("/update")
     public ResponseEntity<?> updateCharacteristic(@RequestBody CharacteristicDTO characteristicDTO) throws Exception{
         Optional<CharacteristicDTO> characteristicSearch = characteristicService.getCharacteristicById(characteristicDTO.getId());
         if (characteristicSearch.isPresent()) {
@@ -119,6 +119,27 @@ public class CharacteristicController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Characteristic with ID: " + characteristicDTO.getId() + " was not found.");
         }
+    }*/
+
+    @PutMapping(path = "/update", consumes = {MediaType.APPLICATION_JSON_VALUE ,MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> updateCharacteristic(@RequestParam("file") MultipartFile file, @RequestPart("characteristic") CharacteristicDTO characteristic) throws Exception{
+        Optional<CharacteristicDTO> characteristicSearch = characteristicService.getCharacteristicById(characteristic.getId());
+        String existentIcon = characteristicService.getCharacteristicById(characteristic.getId()).get().getIcon();
+        if(characteristicSearch.isPresent() && file.isEmpty()){
+            characteristic.setIcon(existentIcon);
+            return ResponseEntity.ok(characteristicService.updateCharacteristic(characteristic, characteristic.getId()));
+        } if (characteristicSearch.isPresent() && !file.isEmpty()){
+            File convertedFile = fileManager.convertMultiPartFileToFile(file);
+            String fileName = fileManager.generateFileName(file);
+            s3Service.uploadFile(fileName, convertedFile);
+            convertedFile.delete();
+            String s3Url = s3Config.amazonS3().getUrl(bucketName, fileName).toString();
+            characteristic.setIcon(s3Url);
+            return ResponseEntity.ok(characteristicService.updateCharacteristic(characteristic, characteristic.getId()));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Characteristic with id: " + characteristic.getId() + " was not found.");
+        }
+
     }
 
     @DeleteMapping("/delete/{id}")
