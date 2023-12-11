@@ -88,16 +88,20 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDTO updateCategory(CategoryDTO category, Integer id) throws NotFoundException {
         Optional<CategoryDTO> existingCategory = getCategoryById(id);
-        if (existingCategory.isPresent()){
-            existingCategory.get().setName(category.getName());
-            existingCategory.get().setDescription(category.getDescription());
-            existingCategory.get().setUrlImage(category.getUrlImage());
-            Category categoryUpdated = mapper.convertValue(existingCategory, Category.class);
+        if (existingCategory.isPresent()) {
+            CategoryDTO categoryToUpdate = existingCategory.get();
+            categoryToUpdate.setName(category.getName());
+            categoryToUpdate.setDescription(category.getDescription());
+            categoryToUpdate.setUrlImage(category.getUrlImage());
+
+            Category categoryUpdated = mapper.convertValue(categoryToUpdate, Category.class);
             categoryRepository.save(categoryUpdated);
+
             logger.info("The category was updated successfully.");
         }
-        return mapper.convertValue(existingCategory, CategoryDTO.class);
+        return existingCategory.orElse(null);
     }
+
 
     @Override
     public void deleteCategory(Integer id) throws NotFoundException {

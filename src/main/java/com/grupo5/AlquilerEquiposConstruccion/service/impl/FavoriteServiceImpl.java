@@ -60,15 +60,17 @@ public class FavoriteServiceImpl implements FavoriteService {
     public FavoriteDTO updateFavorite(FavoriteDTO favorite) throws NotFoundException {
         Integer id = favorite.getId();
         Optional<FavoriteDTO> existingFavorite = getFavoriteById(id);
-        if (existingFavorite.isPresent()){
-            existingFavorite.get().setProduct(favorite.getProduct());
-            existingFavorite.get().setUser(favorite.getUser());
-            Favorite favoriteUpdated = mapper.convertValue(existingFavorite, Favorite.class);
+        if (existingFavorite.isPresent()) {
+            FavoriteDTO existingFavoriteDTO = existingFavorite.get();
+            existingFavoriteDTO.setProduct(favorite.getProduct());
+            existingFavoriteDTO.setUser(favorite.getUser());
+            Favorite favoriteUpdated = mapper.convertValue(existingFavoriteDTO, Favorite.class);
             favoriteRepository.save(favoriteUpdated);
             logger.info("The favorite was updated successfully.");
         }
-        return mapper.convertValue(existingFavorite, FavoriteDTO.class);
+        return existingFavorite.orElseThrow(() -> new NotFoundException("Favorite not found"));
     }
+
 
     @Override
     public void deleteFavoriteById(Integer id) throws NotFoundException {
