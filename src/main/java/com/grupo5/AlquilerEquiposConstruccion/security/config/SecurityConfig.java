@@ -73,6 +73,7 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.GET, "/reviews")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.GET, "/reviews/*")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.POST, "/reviews/create")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/reviews/update")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/reviews/delete/*")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.GET,"/reviews/by-product/*")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher(HttpMethod.GET,"/reviews/by-user/*")).hasAnyRole("ADMIN", "USER")

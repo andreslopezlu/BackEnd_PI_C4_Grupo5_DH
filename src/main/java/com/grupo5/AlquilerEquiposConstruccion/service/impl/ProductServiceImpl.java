@@ -124,7 +124,12 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.get().setCostPerDay(product.getCostPerDay());
             existingProduct.get().setTotalReviews(product.getTotalReviews());
             existingProduct.get().setTotalScore(product.getTotalScore());
-            existingProduct.get().setAverage_score((double) ((product.getTotalScore()) / (product.getTotalReviews())));
+            if (existingProduct.get().getTotalReviews()<=0){
+                existingProduct.get().setTotalScore(0);
+                existingProduct.get().setAverage_score(0.0);
+            } else if (existingProduct.get().getTotalReviews()>0){
+                existingProduct.get().setAverage_score((double) ((product.getTotalScore()) / (product.getTotalReviews())));
+            }
             Product productUpdated = mapper.convertValue(existingProduct, Product.class);
             Optional<CategoryDTO> category = categoryService.getCategoryById(product.getCategory().getId());
             if (category.isPresent()) {
