@@ -31,16 +31,19 @@ public class Reservation {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    private boolean active;
+
     public Reservation() {
     }
 
-    public Reservation(Integer id, LocalDate check_in_date, LocalDate checkout_date, String comments, Product product, User user) {
+    public Reservation(Integer id, LocalDate check_in_date, LocalDate checkout_date, String comments, Product product, User user, boolean active) {
         this.id = id;
         this.check_in_date = check_in_date;
         this.checkout_date = checkout_date;
         this.comments = comments;
         this.product = product;
         this.user = user;
+        this.active = active;
     }
 
     public Integer getId() {
@@ -89,5 +92,13 @@ public class Reservation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

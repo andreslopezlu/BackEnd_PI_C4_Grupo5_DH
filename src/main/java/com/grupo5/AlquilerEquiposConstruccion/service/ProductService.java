@@ -12,11 +12,10 @@ public interface ProductService {
     List<ProductDTO> getAllProducts() ;
     Optional<ProductDTO> getProductById(Integer id) throws NotFoundException;
     ProductDTO createProduct(ProductDTORequest product) throws BadRequestException, NotFoundException;
-    ProductDTO updateProduct(ProductDTORequest product,Integer id)throws NotFoundException;
+    ProductDTO updateProduct(ProductDTO product,Integer id)throws NotFoundException;
     void deleteProductById(Integer id) throws NotFoundException;
     List<ProductDTO>getProductsByCategory(String name)throws NotFoundException;
     List<ProductDTO>getProductsByCity(String name) throws NotFoundException;
     List<ProductDTO> getRandomProduct();
     List<ProductDTO> getAllSuggestionsProducts(String input);
-
 }
