@@ -1,4 +1,10 @@
-FROM openjdk:11
+FROM ubuntu
+
+# Actualiza el sistema
+RUN apt update && apt upgrade -y
+
+# Instala el JRE de Java 17
+RUN apt install openjdk-17-jre -y
 
 # Establecer directorio de trabajo
 VOLUME [ "/tmp" ]
