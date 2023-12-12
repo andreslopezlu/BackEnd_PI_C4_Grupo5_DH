@@ -91,6 +91,8 @@ public class ProductServiceImpl implements ProductService {
             throw new BadRequestException("The product has null values.");
         } else {
             Product productCreated = mapper.convertValue(product, Product.class);
+            productCreated.setTotalReviews(0);
+            productCreated.setTotalScore(0);
             Optional<CategoryDTO> category = categoryService.getCategoryById(product.getCategory_id());
             if (category.isPresent()) {
                 Category categoryEntity = mapper.convertValue(category.get(), Category.class);
