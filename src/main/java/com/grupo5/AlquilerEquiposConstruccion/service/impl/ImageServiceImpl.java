@@ -88,13 +88,17 @@ public class ImageServiceImpl implements ImageService {
     public ImageDTO updateImage(ImageDTO imageDTO, Integer id) throws NotFoundException {
         Optional<ImageDTO> existingImage = getImageById(id);
         if (existingImage.isPresent()){
-            existingImage.get().setUrl(imageDTO.getUrl());
-            Image imageUpdated = mapper.convertValue(existingImage, Image.class);
+            ImageDTO existingImageDTO = existingImage.get();
+            existingImageDTO.setUrl(imageDTO.getUrl());
+
+            Image imageUpdated = mapper.convertValue(existingImageDTO, Image.class);
             imageRepository.save(imageUpdated);
+
             logger.info("The image was updated successfully.");
         }
-        return mapper.convertValue(existingImage, ImageDTO.class);
+        return existingImage.orElse(null);
     }
+
 
     @Override
     public void deleteImageById(Integer id) throws NotFoundException {

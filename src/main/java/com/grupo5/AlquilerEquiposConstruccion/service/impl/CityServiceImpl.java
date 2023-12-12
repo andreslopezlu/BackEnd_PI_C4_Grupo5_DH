@@ -56,14 +56,15 @@ public class CityServiceImpl implements CityService {
     @Override
     public CityDTO updateCity(CityDTO city, Integer id) throws NotFoundException {
         Optional<CityDTO> existingCity = getCityById(id);
-        if (existingCity.isPresent()){
+        if (existingCity.isPresent()) {
             existingCity.get().setName(city.getName());
-            City cityUpdated = mapper.convertValue(existingCity, City.class);
+            City cityUpdated = mapper.convertValue(existingCity.get(), City.class);
             cityRepository.save(cityUpdated);
             logger.info("The city was updated successfully.");
         }
-        return mapper.convertValue(existingCity, CityDTO.class);
+        return existingCity.orElseThrow(() -> new NotFoundException("City not found."));
     }
+
 
     @Override
     public void deleteCityById(Integer id) throws NotFoundException {

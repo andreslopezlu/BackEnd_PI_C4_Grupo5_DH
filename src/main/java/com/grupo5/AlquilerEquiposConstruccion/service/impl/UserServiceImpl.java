@@ -10,7 +10,7 @@ import com.grupo5.AlquilerEquiposConstruccion.model.User;
 import com.grupo5.AlquilerEquiposConstruccion.repository.UserRepository;
 import com.grupo5.AlquilerEquiposConstruccion.service.EmailService;
 import com.grupo5.AlquilerEquiposConstruccion.service.UserService;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -20,9 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j(topic = "userServiceImplLogger")
 public class UserServiceImpl implements UserService {
-
-    private final Logger logger = Logger.getLogger(CategoryServiceImpl.class);
 
     @Autowired
     UserRepository userRepository;
@@ -44,7 +43,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("The user already exists.");
         } else {
             userCreated = mapper.convertValue(userDTO, User.class);
-            logger.info("The user was created successfully.");
+            log.info("The user was created successfully.");
             userRepository.save(userCreated);
         }
 
@@ -87,16 +86,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(UserDTO userDTO, Integer id) throws NotFoundException{
+    public UserDTO updateUser(UserDTO userDTO, Integer id) throws NotFoundException {
         Optional<UserDTO> existingUser = getUserById(id);
-        if (existingUser.isPresent()){
-            existingUser.get().setRole(userDTO.getRole());
-            User userUpdated = mapper.convertValue(existingUser, User.class);
+        if (existingUser.isPresent()) {
+            UserDTO userToUpdate = existingUser.get();
+            userToUpdate.setRole(userDTO.getRole());
+
+            User userUpdated = mapper.convertValue(userToUpdate, User.class);
             userRepository.save(userUpdated);
-            logger.info("The user was updated successfully.");
+
+            log.info("The user was updated successfully.");
         }
-        return mapper.convertValue(existingUser, UserDTO.class);
+        return existingUser.orElse(null);
     }
+
 
     @Override
     public void deleteUserById(Integer id) throws NotFoundException{
@@ -109,12 +112,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public RoleDTO getRoleByUsername(String username) throws NotFoundException {
         Optional<User> user = userRepository.findByEmail(username);
-        if (user != null) {
+        if (user.isPresent()) {
             Role role = user.get().getRole();
             return mapper.convertValue(role, RoleDTO.class);
         }
         throw new NotFoundException("User not found.");
     }
+
 
     @Override
     public void confirmationEmail(String email) throws NotFoundException {
